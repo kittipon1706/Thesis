@@ -23,7 +23,6 @@ public abstract class Enemy : MonoBehaviour
     public Animator Animator;
     public CapsuleCollider Collider;
     public GameObject Model;
-    public int Speed;
     //Waypoint
 
     //protected abstract void AttackPattern();
@@ -43,14 +42,12 @@ public abstract class Enemy : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("Enemies");
     }
 
-    public virtual void Initialize(int speed,string Model_Name,Vector3 position,Vector3 scale, string ani,string avatar,string BE_name)
+    public virtual void Initialize(string Model_Name,Vector3 position,Vector3 scale, string ani,string avatar,string BE_name)
     {
-        Speed = speed;
         Model = Instantiate(Resources.Load<GameObject>("Art/3D/Enemies/Goblin/" + Model_Name), position , Quaternion.identity);
         Model.transform.localScale = scale;
         Model.transform.SetParent(gameObject.transform);
 
-        GetComponent<BehaviorTree>().ExternalBehavior = Resources.Load<ExternalBehavior>("Art/3D/Enemies/Goblin/" + BE_name);
         GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Art/3D/Enemies/Goblin/" + ani);
         GetComponent<Animator>().avatar = Resources.Load<Avatar>("Art/3D/Enemies/Goblin/" + avatar);
     }

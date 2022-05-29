@@ -8,7 +8,7 @@ public class Goblin_Controller : MonoBehaviour
     [SerializeField] private GameObject Player;
     [SerializeField] private float Attack_Speed = 6;
     [SerializeField] private float Move_Speed = 10;
-    private void Start()
+    private void Awake()
     {
 
         Player = GameObject.FindGameObjectWithTag("Player");
@@ -23,8 +23,5 @@ public class Goblin_Controller : MonoBehaviour
         gameObject.transform.forward = direction;
     }
 
-    private void Update()
-    {
-    }
-
+  
 }
