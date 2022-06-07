@@ -8,6 +8,7 @@ public class ObjectPooler : MonoBehaviour
     {
         public string tag;
         public int size;
+        public GameObject prefab;
     }
 
     #region Singleton
@@ -26,23 +27,29 @@ public class ObjectPooler : MonoBehaviour
     {
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
-        
+
     }
 
     public void Setup_Pool(string tag)
     {
+        Pool this_pool = null;
         foreach (Pool pool in pools)
         {
-            Queue<GameObject> objectPool = new Queue<GameObject>();
-            for (int i = 0; i < pool.size; i++)
+            if (pool.tag == tag)
             {
-                Enemy<Goblin> GoblinClone = new Enemy<Goblin>("GoblinClone");
-                GoblinClone.GameObject.SetActive(false);
-                objectPool.Enqueue(GoblinClone.GameObject);
+                this_pool = pool;
+                break;
             }
-
-            poolDictionary.Add(pool.tag, objectPool);
         }
+        Queue<GameObject> objectPool = new Queue<GameObject>();
+        for (int i = 0; i < this_pool.size; i++)
+        {
+            GameObject obj = Instantiate(this_pool.prefab);
+            obj.gameObject.SetActive(false);
+            objectPool.Enqueue(obj.gameObject);
+        }
+
+        poolDictionary.Add(this_pool.tag, objectPool);
     }
     
     public GameObject SpawnFormPool (string tag, Vector3 position, Quaternion rotation)
@@ -79,5 +86,16 @@ public class ObjectPooler : MonoBehaviour
             Destroy(item);
         }
         return objectpool;
+    }
+
+    public void AddToPool(GameObject poolObj, string tag)
+    {
+        Pool pool = new Pool();
+        pool.prefab = poolObj;
+        pool.tag = tag;
+        pool.size = 5;
+        pools.Add(pool);
+
+        Setup_Pool(tag);
     }
 }

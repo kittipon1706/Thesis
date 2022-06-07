@@ -16,12 +16,13 @@ public class Goblin : Enemy
             avatar: "GoblinModelAvatar",
             BE_name: "Goblin_BE"
         );
-        GetComponent<BehaviorTree>().ExternalBehavior = Resources.Load<ExternalBehavior>("Art/3D/Enemies/Goblin/Goblin_BE");
-        gameObject.AddComponent<Goblin_Controller>();
         Collider.radius = Model.transform.localScale.x / 2;
         Collider.height = Model.transform.localScale.y * 2;
         Collider.center = new Vector3(0, Model.transform.localScale.y, Collider.radius/2) ;
         transform.localScale = new Vector3(1f, 1f, 1f);
+
+        gameObject.AddComponent<Goblin_Controller>();
+        GetComponent<BehaviorTree>().ExternalBehavior = Resources.Load<ExternalBehavior>("Art/3D/Enemies/Goblin/Goblin_BE");
     }
-    
+
 }

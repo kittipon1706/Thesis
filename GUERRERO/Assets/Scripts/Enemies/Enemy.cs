@@ -40,6 +40,8 @@ public abstract class Enemy : MonoBehaviour
 
         gameObject.tag = "Enemy";
         gameObject.layer = LayerMask.NameToLayer("Enemies");
+
+
     }
 
     public virtual void Initialize(string Model_Name,Vector3 position,Vector3 scale, string ani,string avatar,string BE_name)
