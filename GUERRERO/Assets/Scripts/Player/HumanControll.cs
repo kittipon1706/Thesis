@@ -46,7 +46,7 @@ public class HumanControll : MonoBehaviour
             {
                 if (Input.GetKey(KeyCode.Space))
                 {
-                    CharacterCore.Instance.TakeDamnge(CharacterCore.Instance.characterData.damage);
+                    CharacterCore.Instance.TakeDamnge(CharacterCore.Instance.characterData.damage);//Don't forgot to Delete This Line
                     directionY = CharacterCore.Instance.characterData.jumpForce;
                 }
                 else
