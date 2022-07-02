@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class ObjectPooler : MonoBehaviour
@@ -8,7 +10,8 @@ public class ObjectPooler : MonoBehaviour
     {
         public string tag;
         public int size;
-        public GameObject prefab;
+        public MonoScript script;
+        public GameObject GroupObject;
     }
 
     #region Singleton
@@ -22,37 +25,76 @@ public class ObjectPooler : MonoBehaviour
 
     public List<Pool> pools;
     public Dictionary<string, Queue<GameObject>> poolDictionary;
-    // Start is called before the first frame update
-    void Start()
+    private List<int> _PoolSize = new List<int>();
+    
+
+    private void Start()
     {
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
-
-    }
-
-    public void Setup_Pool(string tag)
-    {
-        Pool this_pool = null;
         foreach (Pool pool in pools)
         {
+            Queue<GameObject> objectPool = new Queue<GameObject>();
+            for (int i = 0; i < pool.size; i++)
+            {
+                GameObject obj = new GameObject(pool.tag + (i + 1));
+                obj.transform.parent = pool.GroupObject.transform;
+                int rd = UnityEngine.Random.Range(0, 3);
+                obj.transform.position = Goblin_Manager.Instance.spawnPoints[rd].position;
+                obj.SetActive(false);
+                var typeName = pool.script.GetClass()?.AssemblyQualifiedName;
+                var ScriptType = Type.GetType(typeName);
+                obj.AddComponent(ScriptType);
+                objectPool.Enqueue(obj);
+            }
+            _PoolSize.Add(pool.size);
+            poolDictionary.Add(pool.tag, objectPool);
+        }
+
+        EventHandler.Instance.OnSizeChange += Setup_Pool;
+    }
+
+    private void Update()
+    {
+        for (int i = 0; i < pools.Count; i++)
+        {
+            if (pools[i].size != _PoolSize[i] && pools[i].size > _PoolSize[i])
+            {
+                EventHandler.Instance.OnSizeChange?.Invoke(pools[i].tag , Math.Abs(pools[i].size - _PoolSize[i]));
+                _PoolSize[i] = pools[i].size;
+            }
+        }
+    }
+
+    public void Setup_Pool(string tag,int unit)
+    {
+        foreach (Pool pool in pools)
+        {  
+            Queue<GameObject> objectPool = new Queue<GameObject>();
             if (pool.tag == tag)
             {
-                this_pool = pool;
+                objectPool = poolDictionary[pool.tag];
+                var count = objectPool.Count;
+                for (int i = 0; i < unit; i++)
+                {
+                    GameObject obj = new GameObject(pool.tag + (i + 1));
+                    obj.transform.parent = pool.GroupObject.transform;
+                    int rd = UnityEngine.Random.Range(0, 3);
+                    obj.transform.position = Goblin_Manager.Instance.spawnPoints[rd].position;
+                    obj.SetActive(false);
+                    var typeName = pool.script.GetClass()?.AssemblyQualifiedName;
+                    var ScriptType = Type.GetType(typeName);
+                    obj.AddComponent(ScriptType);
+                    objectPool.Enqueue(obj);
+                }
+                poolDictionary[pool.tag] = objectPool;
+                Debug.Log(poolDictionary[pool.tag].Count);
                 break;
             }
         }
-        Queue<GameObject> objectPool = new Queue<GameObject>();
-        for (int i = 0; i < this_pool.size; i++)
-        {
-            GameObject obj = Instantiate(this_pool.prefab);
-            obj.gameObject.SetActive(false);
-            objectPool.Enqueue(obj.gameObject);
-        }
-
-        poolDictionary.Add(this_pool.tag, objectPool);
     }
     
-    public GameObject SpawnFormPool (string tag, Vector3 position, Quaternion rotation)
+    public GameObject SpawnFormPool (string tag)
     {
         if (!poolDictionary.ContainsKey(tag))
         {
@@ -62,8 +104,6 @@ public class ObjectPooler : MonoBehaviour
 
         GameObject objectToSpawn = poolDictionary[tag].Dequeue();
         objectToSpawn.SetActive(true);
-        objectToSpawn.transform.position = position;
-        objectToSpawn.transform.rotation = rotation;
 
         IPoolObject poolObj = objectToSpawn.GetComponent<IPoolObject>();
 
@@ -77,25 +117,14 @@ public class ObjectPooler : MonoBehaviour
 
     }
 
-    public GameObject BackIntoPool(string tag , GameObject objectpool , List<Component> DesComponant)
+    public void BackIntoPool(string tag , GameObject objectpool)
     {
         objectpool.SetActive(false);
-        ObjectPooler.instance.poolDictionary[tag].Enqueue(objectpool);
-        foreach (var item in DesComponant)
+        poolDictionary[tag].Enqueue(objectpool);
+      /*  foreach (var item in DesComponant)
         {
             Destroy(item);
-        }
-        return objectpool;
+        }*/
     }
 
-    public void AddToPool(GameObject poolObj, string tag)
-    {
-        Pool pool = new Pool();
-        pool.prefab = poolObj;
-        pool.tag = tag;
-        pool.size = 5;
-        pools.Add(pool);
-
-        Setup_Pool(tag);
-    }
 }
