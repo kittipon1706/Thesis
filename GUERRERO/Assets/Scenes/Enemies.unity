@@ -7899,7 +7899,7 @@ GameObject:
   - component: {fileID: 416797198}
   - component: {fileID: 416797197}
   - component: {fileID: 416797199}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Hut (1)
   m_TagString: Objective
   m_Icon: {fileID: 0}
@@ -7973,7 +7973,7 @@ BoxCollider:
   m_GameObject: {fileID: 416797196}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 27.05621, y: 27.493555, z: 38.54813}
   m_Center: {x: 0, y: 0, z: -5.7446938}
@@ -8743,7 +8743,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 641496003}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HutPoint
   m_TagString: Untagged
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
@@ -12442,7 +12442,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 970953769}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HutPoint
   m_TagString: Untagged
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
@@ -32774,6 +32774,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1675592378}
   - component: {fileID: 1675592377}
+  - component: {fileID: 1675592379}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -32807,6 +32808,42 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1675592379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675592376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 327f563555234e44fa8666b02807d026, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Waves:
+  - enemy:
+    - tag: Goblin
+      size: 8
+      time: 10
+    - tag: Goblin
+      size: 10
+      time: 20
+  - enemy:
+    - tag: Goblin
+      size: 7
+      time: 10
+  - enemy:
+    - tag: Goblin
+      size: 20
+      time: 10
+  NumEnemyInWave: 0
+  TimeBetweenWave: 30
+  WaveCount: 0
+  WaveStart: 0
+  WaveCounting: 0
+  GameTime: 0
+  Maxtime: 0
+  TimeInWave: 0
 --- !u!43 &1698649827
 Mesh:
   m_ObjectHideFlags: 0
@@ -32982,7 +33019,7 @@ GameObject:
   - component: {fileID: 1725033474}
   - component: {fileID: 1725033477}
   - component: {fileID: 1725033476}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HutModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36697,7 +36734,7 @@ GameObject:
   - component: {fileID: 1923971302}
   - component: {fileID: 1923971300}
   - component: {fileID: 1923971301}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Hut
   m_TagString: Objective
   m_Icon: {fileID: 0}
@@ -36729,7 +36766,7 @@ BoxCollider:
   m_GameObject: {fileID: 1923971296}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 27.05621, y: 27.493555, z: 38.54813}
   m_Center: {x: 0, y: 0, z: -5.7446938}
@@ -37199,7 +37236,7 @@ GameObject:
   - component: {fileID: 2075643315}
   - component: {fileID: 2075643317}
   - component: {fileID: 2075643316}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HutModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}

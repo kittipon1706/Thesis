@@ -52,6 +52,7 @@ public class ObjectPooler : MonoBehaviour
         }
 
         EventHandler.Instance.OnSizeChange += Setup_Pool;
+        EventHandler.Instance.OnUpdatePoolSize += UpdatePoolSize;
     }
 
     private void Update()
@@ -77,7 +78,7 @@ public class ObjectPooler : MonoBehaviour
                 var count = objectPool.Count;
                 for (int i = 0; i < unit; i++)
                 {
-                    GameObject obj = new GameObject(pool.tag + (i + 1));
+                    GameObject obj = new GameObject(pool.tag + (count + i + 1));
                     obj.transform.parent = pool.GroupObject.transform;
                     int rd = UnityEngine.Random.Range(0, 3);
                     obj.transform.position = Goblin_Manager.Instance.spawnPoints[rd].position;
@@ -105,14 +106,6 @@ public class ObjectPooler : MonoBehaviour
         GameObject objectToSpawn = poolDictionary[tag].Dequeue();
         objectToSpawn.SetActive(true);
 
-        IPoolObject poolObj = objectToSpawn.GetComponent<IPoolObject>();
-
-        if (poolObj != null)
-        {
-            poolObj.OnObjectSpawn();
-        }
-
-        //poolDictionary[tag].Enqueue(objectToSpawn);
         return objectToSpawn;
 
     }
@@ -121,10 +114,18 @@ public class ObjectPooler : MonoBehaviour
     {
         objectpool.SetActive(false);
         poolDictionary[tag].Enqueue(objectpool);
-      /*  foreach (var item in DesComponant)
-        {
-            Destroy(item);
-        }*/
     }
 
+    private void UpdatePoolSize(string tag , int size)
+    {
+        foreach (var item in pools)
+        {
+            if (item.tag == tag)
+            {
+
+                item.size += size - item.size;
+                break;
+            }
+        }
+    }
 }

@@ -30,6 +30,7 @@ public class Goblin : Enemy
         GetComponent<BehaviorTree>().ExternalBehavior = Resources.Load<ExternalBehavior>("Art/3D/Enemies/Goblin/Goblin_BE");
         OnDeath += ObjectPooler.instance.BackIntoPool;
         OnDeath += Death;
+        OnDeath += WaveManager.Instance.RemoveformWave;
         EventHandler.Instance.OnUpdateTarget += SetTarget;
         Goblin_Manager.Instance.OnUpdateLeader += SetLeader;
         Weapon = Model.GetComponent<SphereCollider>();

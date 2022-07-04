@@ -30,11 +30,6 @@ public class Goblin_Manager : MonoBehaviour
         {
             leader = transform.GetChild(0).gameObject;
         }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            ObjectPooler.instance.SpawnFormPool("Goblin");
-        }
     }
     private void UpdateTarget()
     {
