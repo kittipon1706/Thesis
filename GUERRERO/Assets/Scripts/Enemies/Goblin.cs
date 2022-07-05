@@ -28,10 +28,10 @@ public class Goblin : Enemy
         Collider.center = new Vector3(0f, 8f, 0f) ;
         transform.localScale = new Vector3(1f, 1f, 1f);
         GetComponent<BehaviorTree>().ExternalBehavior = Resources.Load<ExternalBehavior>("Art/3D/Enemies/Goblin/Goblin_BE");
-        OnDeath += ObjectPooler.instance.BackIntoPool;
+        OnDeath += ObjectPooler.Instance.BackIntoPool;
         OnDeath += Death;
         OnDeath += WaveManager.Instance.RemoveformWave;
-        EventHandler.Instance.OnUpdateTarget += SetTarget;
+        Goblin_Manager.Instance.OnUpdateTarget += SetTarget;
         Goblin_Manager.Instance.OnUpdateLeader += SetLeader;
         Weapon = Model.GetComponent<SphereCollider>();
         BE = GetComponent<BehaviorTree>();
@@ -39,7 +39,7 @@ public class Goblin : Enemy
         BE.SetVariableValue("Move_Speed", Move_Speed);
         BE.SetVariableValue("Weapon", Weapon);
         SetTarget();
-        SetLeader();
+        SetLeader(null);
         
     }
     private void Update()
@@ -47,7 +47,7 @@ public class Goblin : Enemy
         if (CurrentHP <= 0)
         {
             OnDeath?.Invoke(monsName, gameObject);
-            Goblin_Manager.Instance.OnUpdateLeader?.Invoke();
+            Goblin_Manager.Instance.OnUpdateLeader?.Invoke(gameObject);
         }
 
 
@@ -74,7 +74,6 @@ public class Goblin : Enemy
     {
         CurrentHP = healthPoint;
         BE.SetVariableValue("OnAttack", false);
-        gameObject.transform.SetAsLastSibling();
         int rd = UnityEngine.Random.Range(0, 3);
         gameObject.transform.position = Goblin_Manager.Instance.spawnPoints[rd].position;
     }
@@ -87,7 +86,7 @@ public class Goblin : Enemy
         BE.SetVariableValue("TargetPos", Goblin_Manager.Instance.target.transform.position);
     }
 
-    private void SetLeader()
+    private void SetLeader(GameObject obj)
     {
         BE.SetVariableValue("Leader", null);
         if (gameObject != Goblin_Manager.Instance.leader)

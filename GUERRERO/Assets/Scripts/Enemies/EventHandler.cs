@@ -13,9 +13,7 @@ public class EventHandler : MonoBehaviour
     }
 
     #region ObjectPooler
-    public Action<string, int> OnSizeChange = null;
-    public Action<string, int> OnUpdatePoolSize = null;
+    
     #endregion
 
-    public Action OnUpdateTarget;
 }

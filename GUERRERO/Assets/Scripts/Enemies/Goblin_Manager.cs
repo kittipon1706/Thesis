@@ -8,19 +8,16 @@ public class Goblin_Manager : MonoBehaviour
     public static Goblin_Manager Instance;
 
     [SerializeField] public List<Transform> spawnPoints = new List<Transform>();
-    public List<GameObject> AllTarget = new List<GameObject>();
+    public List<GameObject> allTarget = new List<GameObject>();
     [SerializeField] public GameObject target;
     public GameObject leader;
-    public Action OnUpdateLeader;
+    public Action<GameObject> OnUpdateLeader;
+    public Action OnUpdateTarget;
     private void Awake()
     {
         Instance = this;
-    }
-
-    private void Start()
-    {
-        target = AllTarget[0];
-        EventHandler.Instance.OnUpdateTarget += UpdateTarget;
+        target = allTarget[0];
+        OnUpdateTarget += UpdateTarget;
         OnUpdateLeader += UpdateLeader;
     }
 
@@ -33,21 +30,24 @@ public class Goblin_Manager : MonoBehaviour
     }
     private void UpdateTarget()
     {
-        target = AllTarget[1];
+        target = allTarget[1];
     }
 
-    private void UpdateLeader()
+    private void UpdateLeader(GameObject obj)
     {
-        for (int i = 0; i <= transform.childCount; i++)
+        if (obj == leader)
         {
-            var obj = transform.GetChild(i).gameObject;
-            if (obj.activeSelf == true)
+            for (int i = 0; i <= transform.childCount; i++)
             {
-                leader = obj.gameObject;
-                break;
-            }
+                obj = transform.GetChild(i).gameObject;
+                if (obj.activeSelf == true)
+                {
+                    leader = obj.gameObject;
+                    break;
+                }
 
-            leader = null;
+                leader = null;
+            }
         }
     }
 }

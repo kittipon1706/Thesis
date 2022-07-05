@@ -15,18 +15,19 @@ public class ObjectPooler : MonoBehaviour
     }
 
     #region Singleton
-    public static ObjectPooler instance;
+    public static ObjectPooler Instance;
 
     private void Awake()
     {
-        instance = this;
+        Instance = this;
     }
     #endregion
 
     public List<Pool> pools;
     public Dictionary<string, Queue<GameObject>> poolDictionary;
     private List<int> _PoolSize = new List<int>();
-    
+    public Action<string, int> OnSizeChange = null;
+    public Action<string, int> OnUpdatePoolSize = null;
 
     private void Start()
     {
@@ -51,8 +52,8 @@ public class ObjectPooler : MonoBehaviour
             poolDictionary.Add(pool.tag, objectPool);
         }
 
-        EventHandler.Instance.OnSizeChange += Setup_Pool;
-        EventHandler.Instance.OnUpdatePoolSize += UpdatePoolSize;
+        OnSizeChange += Setup_Pool;
+        OnUpdatePoolSize += UpdatePoolSize;
     }
 
     private void Update()
@@ -61,7 +62,7 @@ public class ObjectPooler : MonoBehaviour
         {
             if (pools[i].size != _PoolSize[i] && pools[i].size > _PoolSize[i])
             {
-                EventHandler.Instance.OnSizeChange?.Invoke(pools[i].tag , Math.Abs(pools[i].size - _PoolSize[i]));
+                OnSizeChange?.Invoke(pools[i].tag , Math.Abs(pools[i].size - _PoolSize[i]));
                 _PoolSize[i] = pools[i].size;
             }
         }

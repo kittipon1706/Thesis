@@ -32,7 +32,7 @@ public class BarricadeCtrl : MonoBehaviour
     private void Destroy()
     {
         gameObject.SetActive(false);
-        EventHandler.Instance.OnUpdateTarget?.Invoke();
+        Goblin_Manager.Instance.OnUpdateTarget?.Invoke();
         //back to pool;
     }
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class WaveManager : MonoBehaviour
@@ -21,14 +22,10 @@ public class WaveManager : MonoBehaviour
     }
 
     public List<Wave> Waves;
-    [SerializeField] private int NumEnemyInWave;
-    [SerializeField] private float TimeBetweenWave;
-    [SerializeField] private int WaveCount;
-    [SerializeField] private bool WaveStart;
-    [SerializeField] private bool WaveCounting;
-    [SerializeField] private float GameTime;
-    [SerializeField] private float Maxtime;
-    [SerializeField] private float TimeInWave;
+    [SerializeField] private int _NumEnemyInWave;
+    [SerializeField] private float _TimeBetweenWave;
+    [SerializeField] private int _WaveCount;
+    [SerializeField] private float _TimeToSpawm;
     private void Awake()
     {
         Instance = this;
@@ -36,41 +33,50 @@ public class WaveManager : MonoBehaviour
 
     private void Start()
     {
-        GameTime = TimeBetweenWave;
+        _TimeToSpawm = _TimeBetweenWave;
     }
 
     private void Update()
     {
-        if (WaveCounting)
+        if (GManager.Instance.State == GManager.GamsState.Prepare)
         {
-            GameTime -= Time.deltaTime;
+            _TimeToSpawm -= Time.deltaTime;
+            if (_TimeToSpawm <= 0)
+            {
+                GManager.Instance.UpdateGameState(GManager.GamsState.EnemyWave);
+                _TimeToSpawm = 0;
+                CheckPoolSize();
+            }
+        }
+        else if (GManager.Instance.State == GManager.GamsState.EnemyWave)
+        {
+            _TimeToSpawm += Time.deltaTime;
+            if (_NumEnemyInWave <= 0)
+            {
+                GManager.Instance.UpdateGameState(GManager.GamsState.Clean);
+                _TimeToSpawm = _TimeBetweenWave;
+                _WaveCount++;
+            }
+        }
+        else if (GManager.Instance.State == GManager.GamsState.Clean)
+        {
+            TaskDelay(10f);
         }
 
-        if (GameTime <= 0)
-        {
-            WaveCounting = false;
-            WaveStart = true;
-            GameTime = TimeBetweenWave;
-        }
+        AttackMonsterByClick();
+    }
 
-        if (WaveStart)
-        {
-            CheckPoolSize();
-            StartCoroutine(SpawnEnemy());
-        }
+    private async void TaskDelay(float Delaytime)
+    {
+        var time = Delaytime * 1000;
+        await Task.Delay((int)time);
+    }
 
-        if (!WaveStart && TimeInWave < Maxtime && !WaveCounting)
-        {
-            TimeInWave += Time.deltaTime;
-        }
-
-        if (!WaveStart && TimeInWave >= Maxtime && NumEnemyInWave <= 0)
-        {
-            WaveCounting = true;
-            TimeInWave = 0;
-            Maxtime = 0;
-        }
-
+    /// <summary>
+    /// For Test[Click to enemy for attack.]
+    /// </summary>
+    private void AttackMonsterByClick()
+    {
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
@@ -83,57 +89,50 @@ public class WaveManager : MonoBehaviour
                 }
             }
         }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            CheckPoolSize();
-            //SpawnEnemy();
-        }
     }
 
     private void CheckPoolSize()
     {
         Dictionary<string,int> sumUnit = new Dictionary<string,int>();
-        for (int i = 0; i < Waves[WaveCount].enemy.Count; i++)
+        for (int i = 0; i < Waves[_WaveCount].enemy.Count; i++)
         {
-            Maxtime += Waves[WaveCount].enemy[i].time;
-            NumEnemyInWave += Waves[WaveCount].enemy[i].size;
-            if (!sumUnit.ContainsKey(Waves[WaveCount].enemy[i].tag))
+            _NumEnemyInWave += Waves[_WaveCount].enemy[i].size;
+            if (!sumUnit.ContainsKey(Waves[_WaveCount].enemy[i].tag))
             {
-                sumUnit.Add(Waves[WaveCount].enemy[i].tag, Waves[WaveCount].enemy[i].size);
+                sumUnit.Add(Waves[_WaveCount].enemy[i].tag, Waves[_WaveCount].enemy[i].size);
             }
             else
             {
-                sumUnit[Waves[WaveCount].enemy[i].tag] += Waves[WaveCount].enemy[i].size;
+                sumUnit[Waves[_WaveCount].enemy[i].tag] += Waves[_WaveCount].enemy[i].size;
             }
 
-            if (sumUnit[Waves[WaveCount].enemy[i].tag] > ObjectPooler.instance.poolDictionary[Waves[WaveCount].enemy[i].tag].Count)
+            if (sumUnit[Waves[_WaveCount].enemy[i].tag] > ObjectPooler.Instance.poolDictionary[Waves[_WaveCount].enemy[i].tag].Count)
             {
-                EventHandler.Instance.OnUpdatePoolSize?.Invoke(Waves[WaveCount].enemy[i].tag, sumUnit[Waves[WaveCount].enemy[i].tag]);
+                ObjectPooler.Instance.OnUpdatePoolSize?.Invoke(Waves[_WaveCount].enemy[i].tag, sumUnit[Waves[_WaveCount].enemy[i].tag]);
             }
+        }
+
+        TaskDelay(1f);
+
+        for (int i = 0; i < Waves[_WaveCount].enemy.Count; i++)
+        {
+            StartCoroutine(SpawnEnemies(i));
         }
     }
 
-    public IEnumerator SpawnEnemy() {
-
-        WaveStart = false;
-
-        for (int i = 0; i < Waves[WaveCount].enemy.Count ; i++)
+    private IEnumerator SpawnEnemies(int index)
+    {
+        yield return new WaitForSeconds(Waves[_WaveCount].enemy[index].time);
+        for (int i = 0; i < Waves[_WaveCount].enemy[index].size; i++)
         {
-            yield return new WaitForSeconds(Waves[WaveCount].enemy[i].time);
-            for (int j = 0; j < Waves[WaveCount].enemy[i].size ; j++)
-            {
-                var obj = ObjectPooler.instance.SpawnFormPool(Waves[WaveCount].enemy[i].tag);
-            }
-            Waves[WaveCount].enemy[i].size = 0;
+            yield return new WaitForSeconds(1f);
+            var obj = ObjectPooler.Instance.SpawnFormPool(Waves[_WaveCount].enemy[index].tag);
         }
-
-        WaveCount++;
-
+        Waves[_WaveCount].enemy[index].size = 0;
     }
 
     public void RemoveformWave(string name,GameObject gameObject)
     {
-        NumEnemyInWave--;
+        _NumEnemyInWave--;
     }
 }

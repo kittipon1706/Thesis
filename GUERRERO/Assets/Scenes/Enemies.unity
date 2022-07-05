@@ -32775,6 +32775,7 @@ GameObject:
   - component: {fileID: 1675592378}
   - component: {fileID: 1675592377}
   - component: {fileID: 1675592379}
+  - component: {fileID: 1675592380}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -32836,14 +32837,23 @@ MonoBehaviour:
     - tag: Goblin
       size: 20
       time: 10
-  NumEnemyInWave: 0
-  TimeBetweenWave: 30
-  WaveCount: 0
-  WaveStart: 0
-  WaveCounting: 0
-  GameTime: 0
-  Maxtime: 0
-  TimeInWave: 0
+  _NumEnemyInWave: 0
+  _TimeBetweenWave: 30
+  _WaveCount: 0
+  _TimeToSpawm: 0
+--- !u!114 &1675592380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675592376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5800c35e1decce94191c046cbb4ef78d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  State: 0
 --- !u!43 &1698649827
 Mesh:
   m_ObjectHideFlags: 0
@@ -36875,7 +36885,7 @@ MonoBehaviour:
   - {fileID: 687638351}
   - {fileID: 971988321}
   - {fileID: 1392073363}
-  AllTarget:
+  allTarget:
   - {fileID: 416797196}
   - {fileID: 1923971296}
   target: {fileID: 1923971296}
