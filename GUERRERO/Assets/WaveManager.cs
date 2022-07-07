@@ -43,9 +43,14 @@ public class WaveManager : MonoBehaviour
             _TimeToSpawm -= Time.deltaTime;
             if (_TimeToSpawm <= 0)
             {
-                GManager.Instance.UpdateGameState(GManager.GamsState.EnemyWave);
+                if (Waves.Count <= _WaveCount)
+                {
+                    GManager.Instance.UpdateGameState(GManager.GamsState.EnemyWave);
+                    CheckPoolSize();
+                }
+                else Debug.Log(":::Wave End:::");
+
                 _TimeToSpawm = 0;
-                CheckPoolSize();
             }
         }
         else if (GManager.Instance.State == GManager.GamsState.EnemyWave)
@@ -60,7 +65,7 @@ public class WaveManager : MonoBehaviour
         }
         else if (GManager.Instance.State == GManager.GamsState.Clean)
         {
-            TaskDelay(10f);
+            GManager.Instance.UpdateGameState(GManager.GamsState.Prepare);
         }
 
         AttackMonsterByClick();

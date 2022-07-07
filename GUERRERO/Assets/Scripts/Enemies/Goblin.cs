@@ -47,7 +47,7 @@ public class Goblin : Enemy
         if (CurrentHP <= 0)
         {
             OnDeath?.Invoke(monsName, gameObject);
-            Goblin_Manager.Instance.OnUpdateLeader?.Invoke(gameObject);
+            //Goblin_Manager.Instance.OnUpdateLeader?.Invoke(gameObject);
         }
 
 
