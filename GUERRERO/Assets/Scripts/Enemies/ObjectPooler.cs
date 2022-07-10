@@ -10,8 +10,8 @@ public class ObjectPooler : MonoBehaviour
     {
         public string tag;
         public int size;
-        public MonoScript script;
         public GameObject GroupObject;
+        public EnemiesType type;
     }
 
     #region Singleton
@@ -22,6 +22,12 @@ public class ObjectPooler : MonoBehaviour
         Instance = this;
     }
     #endregion
+    public enum EnemiesType
+    {
+        Goblin,
+        Drone,
+        Tank,
+    }
 
     public List<Pool> pools;
     public Dictionary<string, Queue<GameObject>> poolDictionary;
@@ -43,8 +49,7 @@ public class ObjectPooler : MonoBehaviour
                 int rd = UnityEngine.Random.Range(0, 3);
                 obj.transform.position = Goblin_Manager.Instance.spawnPoints[rd].position;
                 obj.SetActive(false);
-                var typeName = pool.script.GetClass()?.AssemblyQualifiedName;
-                var ScriptType = Type.GetType(typeName);
+                var ScriptType = Type.GetType(pool.type.ToString());
                 obj.AddComponent(ScriptType);
                 objectPool.Enqueue(obj);
             }
@@ -84,8 +89,7 @@ public class ObjectPooler : MonoBehaviour
                     int rd = UnityEngine.Random.Range(0, 3);
                     obj.transform.position = Goblin_Manager.Instance.spawnPoints[rd].position;
                     obj.SetActive(false);
-                    var typeName = pool.script.GetClass()?.AssemblyQualifiedName;
-                    var ScriptType = Type.GetType(typeName);
+                    var ScriptType = Type.GetType(pool.type.ToString());
                     obj.AddComponent(ScriptType);
                     objectPool.Enqueue(obj);
                 }

@@ -43,7 +43,7 @@ public class WaveManager : MonoBehaviour
             _TimeToSpawm -= Time.deltaTime;
             if (_TimeToSpawm <= 0)
             {
-                if (Waves.Count <= _WaveCount)
+                if (_WaveCount <= Waves.Count)
                 {
                     GManager.Instance.UpdateGameState(GManager.GamsState.EnemyWave);
                     CheckPoolSize();
