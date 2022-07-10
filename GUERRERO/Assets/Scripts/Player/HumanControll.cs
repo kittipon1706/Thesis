@@ -12,6 +12,9 @@ public class HumanControll : MonoBehaviour
 
      float directionY;
 
+    public GameObject buildingPrefabTest;//---------------------------Delete IT
+    public Transform buildPoint;
+
     private void Start()
     {
         view = GetComponent<PhotonView>();
@@ -29,10 +32,20 @@ public class HumanControll : MonoBehaviour
             if (inputX == 0 && inputZ == 0)
             {
                 CharacterCore.Instance.characterData._animator.SetBool("isRunning", false);
-            }
+            }            
             else
             {
                 CharacterCore.Instance.characterData._animator.SetBool("isRunning", true);
+            }
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                //Debug.Log("HoloGram Render Tower");
+            }
+            if (Input.GetKeyUp(KeyCode.E))
+            {
+               GameObject building = PhotonNetwork.Instantiate(("Art/3D/Building/TestTowerPrefab"), buildPoint.position, Quaternion.identity, 0);
+                building.GetComponent<BuildingCore>().buildingData.ownerID = view.ToString();                
             }
 
         }

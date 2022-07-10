@@ -126,8 +126,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 4049171074093935820}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 480ce47b5c0840849aa8b1b112e93c28, type: 3}
+  m_Script: {fileID: 11500000, guid: 3632980af6eb6ae48b91a36a2e35e5d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smoothSpeed: 0.5
-  offset: {x: 0, y: 20, z: -25}
+  smoothSpeed: 0
+  offset: {x: 0, y: 0, z: 0}

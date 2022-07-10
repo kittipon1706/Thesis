@@ -5,13 +5,25 @@ using UnityEngine.UI;
 
 public class UiCore : MonoBehaviour
 {
-    [SerializeField] Text healthText;
-    [SerializeField] Text coinText;
+    public static UiCore Instance;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+    }
+
+    public Text healthText;
+    public Text coinText;
+    public Button updateBuilding_Button;
 
     CharacterCore.CharacterData characterData;
 
     private void Start()
     {
+        updateBuilding_Button.gameObject.SetActive(false);
     }
 
     private void FixedUpdate()
