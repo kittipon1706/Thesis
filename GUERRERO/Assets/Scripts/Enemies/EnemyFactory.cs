@@ -1,12 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 
 public class EnemyFactory : MonoBehaviour
 {
+    public static EnemyFactory Instance;
+
+
+    [System.Serializable]
+    public class EnemyList
+    {
+        public GameObject model;
+        public Avatar avatar;
+        public AnimatorController animator;
+    }
+
+    public List<EnemyList> EnemyLists;
     private void Awake()
     {
-        Enemy<Goblin> GoblinClone = new Enemy<Goblin>("GoblinClone");
-        //GoblinClone.GameObject.transform.position = new Vector3(0, 10, 0);
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else Destroy(gameObject);
     }
 }

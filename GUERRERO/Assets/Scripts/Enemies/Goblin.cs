@@ -14,10 +14,8 @@ public class Goblin : Enemy
     private void Start()
     {
         Initialize(
-           Model_Name: "GoblinModel",
+           index: 0,
            scale: new Vector3(10, 10, 10),
-           ani: "Goblin_AniCtrl",
-           avatar: "GoblinModelAvatar",
            BE_name: "Goblin_BE",
            name: "Goblin",
            hp: 100

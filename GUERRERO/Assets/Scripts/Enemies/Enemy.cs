@@ -45,18 +45,18 @@ public abstract class Enemy : MonoBehaviour
 
     }
 
-    public virtual void Initialize(string Model_Name,Vector3 scale, string ani,string avatar,string BE_name,string name,int hp)
+    protected virtual void Initialize(int index,Vector3 scale,string BE_name,string name,int hp)
     {
         monsName = name;
         healthPoint = hp;
         if (Model == null)
         {
-            Model = Instantiate(Resources.Load<GameObject>("Art/3D/Enemies/Goblin/" + Model_Name), gameObject.transform.position , Quaternion.identity);
+            Model = Instantiate(EnemyFactory.Instance.EnemyLists[index].model, gameObject.transform.position, Quaternion.identity);
             Model.transform.localScale = scale;
             Model.transform.SetParent(gameObject.transform);
         }
-        GetComponent<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Art/3D/Enemies/Goblin/" + ani);
-        GetComponent<Animator>().avatar = Resources.Load<Avatar>("Art/3D/Enemies/Goblin/" + avatar);
+        GetComponent<Animator>().runtimeAnimatorController = EnemyFactory.Instance.EnemyLists[index].animator;
+        GetComponent<Animator>().avatar = EnemyFactory.Instance.EnemyLists[index].avatar;
     }
 }
 

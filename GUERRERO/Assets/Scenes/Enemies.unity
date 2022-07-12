@@ -32775,6 +32775,7 @@ GameObject:
   - component: {fileID: 1675592378}
   - component: {fileID: 1675592379}
   - component: {fileID: 1675592380}
+  - component: {fileID: 1675592377}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -32782,6 +32783,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1675592377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675592376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9de6996ea0e57ad45825ba8ae390444e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnemyLists:
+  - model: {fileID: 4192773037563796967, guid: 93b8489b56d722347b6fd34090637f85, type: 3}
+    avatar: {fileID: 9000000, guid: 0caec50813f2ebc4a99f7853b43783f5, type: 2}
+    animator: {fileID: 9100000, guid: 146e2c7cff165dd449a8c8aa9468b30b, type: 2}
 --- !u!4 &1675592378
 Transform:
   m_ObjectHideFlags: 0
@@ -36919,8 +36936,8 @@ MonoBehaviour:
   pools:
   - tag: Goblin
     size: 0
-    script: {fileID: 11500000, guid: b82f1ef410bc9344d9032b171ff8fa9f, type: 3}
     GroupObject: {fileID: 1972662766}
+    type: 0
 --- !u!850595691 &2034395912
 LightingSettings:
   m_ObjectHideFlags: 0
