@@ -703,6 +703,21 @@ MonoBehaviour:
     level: 3
     maxHealth: 85
     power: 0
+  - product_name: TrapLevel1
+    price: 60
+    level: 1
+    maxHealth: 0
+    power: 0
+  - product_name: TrapLevel2
+    price: 100
+    level: 2
+    maxHealth: 0
+    power: 0
+  - product_name: TrapLevel3
+    price: 150
+    level: 3
+    maxHealth: 0
+    power: 0
   barricadeMarketDataList: []
 --- !u!4 &680328075
 Transform:

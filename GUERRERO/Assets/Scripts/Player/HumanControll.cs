@@ -47,7 +47,6 @@ public class HumanControll : MonoBehaviour
                 string nametobuy = "";
                 MarketCore.Instance.BuyProcessing(out nametobuy,out canmebuy, CharacterCore.Instance.characterData, this.transform, view, "SentryLevel1", MarketCore.marketType.Buy, 1, BuildingCore.BuildingType.Tower);
             }
-
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 //Debug.Log("HoloGram Render Barricade");
@@ -58,10 +57,19 @@ public class HumanControll : MonoBehaviour
                 string nametobuy = "";
                 MarketCore.Instance.BuyProcessing(out nametobuy, out canmebuy, CharacterCore.Instance.characterData, this.transform, view, "BarricadeLevel1", MarketCore.marketType.Buy, 1, BuildingCore.BuildingType.Barricade);
             }
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                //Debug.Log("HoloGram Render Barricade");
+            }
+            if (Input.GetKeyUp(KeyCode.F))
+            {
+                bool canmebuy = false;
+                string nametobuy = "";
+                MarketCore.Instance.BuyProcessing(out nametobuy, out canmebuy, CharacterCore.Instance.characterData, this.transform, view, "TrapLevel1", MarketCore.marketType.Buy, 1, BuildingCore.BuildingType.Trap);
+            }
 
         }
     }
-
     private void FixedUpdate()
     {
         if (view.IsMine)

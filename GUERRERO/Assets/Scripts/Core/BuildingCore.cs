@@ -31,8 +31,8 @@ public class BuildingCore : MonoBehaviour
         public PhotonView ownerID;
         public int level;
         public BuildingType buildingType;
-        public int currentHealth;
-        public int maxHealth;
+        public float currentHealth;
+        public float maxHealth;
         public float power;
     }
 
@@ -40,17 +40,20 @@ public class BuildingCore : MonoBehaviour
     public BuildingData buildingData;
     public List<string> Sentry;
     public List<string> Barricade;
+    public List<string> Trap;
     public Canvas sentryCanvas;
     public Button updateText;
     public Button destroyText;
     public GameObject buildingGrp;
     public CharacterCore.CharacterData chaDataOwner;
+    public Text overhead_HealthText ;
 
     private void Start()
     {
         view = GetComponent<PhotonView>();
         GenerateBuildingModel();
         sentryCanvas.gameObject.SetActive(false);
+        ShowCurrentHealth();
     }
 
     void OnTriggerEnter(Collider other)
@@ -96,10 +99,11 @@ public class BuildingCore : MonoBehaviour
         int i = 0;
         foreach (MarketCore.Building target in MarketCore.Instance.buildingDataList)
         {
-            Debug.Log(nametoBuy);
             if (nametoBuy == target.product_name)
             {
                 buildingData.level = MarketCore.Instance.buildingDataList[i].level;
+                int j = i - 1;
+                buildingData.currentHealth = buildingData.currentHealth + (MarketCore.Instance.buildingDataList[i].maxHealth - MarketCore.Instance.buildingDataList[j].maxHealth);
                 buildingData.buildingName = MarketCore.Instance.buildingDataList[i].product_name;
                 buildingData.maxHealth = MarketCore.Instance.buildingDataList[i].maxHealth;
                 buildingData.power = MarketCore.Instance.buildingDataList[i].power;
@@ -112,6 +116,7 @@ public class BuildingCore : MonoBehaviour
             }
         }
 
+        ShowCurrentHealth();
         foreach (Transform target in buildingGrp.transform)
         {
             PhotonNetwork.Destroy(target.gameObject);
@@ -132,10 +137,36 @@ public class BuildingCore : MonoBehaviour
             GameObject BarricadeBuild = PhotonNetwork.Instantiate(Barricade[buildingData.level], this.transform.position, Quaternion.identity, 0);
             BarricadeBuild.transform.parent = buildingGrp.transform;
         }
+        else if (buildingData.buildingType == BuildingType.Trap)
+        {
+            GameObject BarricadeBuild = PhotonNetwork.Instantiate(Trap[buildingData.level], this.transform.position, Quaternion.identity, 0);
+            BarricadeBuild.transform.parent = buildingGrp.transform;
+        }
+    }
+
+    public void TakeDanage(float damange)
+    {
+        if (view.IsMine)
+        {            
+            buildingData.currentHealth = buildingData.currentHealth - damange;
+            if (buildingData.currentHealth <= 0)
+            {
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                ShowCurrentHealth();
+            }            
+        }
     }
 
     public void DeleteBuilding()
     {
         Destroy(this.gameObject);
+    }
+
+    public void ShowCurrentHealth()
+    {
+        overhead_HealthText.text = buildingData.currentHealth.ToString() + "/" + buildingData.maxHealth.ToString();
     }
 }

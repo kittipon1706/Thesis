@@ -22,7 +22,7 @@ public class MarketCore : MonoBehaviour
         public string product_name;
         public float price;
         public int level;
-        public int maxHealth;
+        public float maxHealth;
         public float power;
     }
 
@@ -72,6 +72,7 @@ public class MarketCore : MonoBehaviour
             if (target.product_name == nametoBuy)
             {
                 building.GetComponent<BuildingCore>().buildingData.level = buildingDataList[i].level;
+                building.GetComponent<BuildingCore>().buildingData.currentHealth = buildingDataList[i].maxHealth;
                 building.GetComponent<BuildingCore>().buildingData.maxHealth = buildingDataList[i].maxHealth;
                 building.GetComponent<BuildingCore>().buildingData.power = buildingDataList[i].power;
             }
@@ -109,12 +110,14 @@ public class MarketCore : MonoBehaviour
                 }
             }
         }
+
         else if(marKetType == marketType.Buy)
         {
             nametoBuy = currentname;
         }
 
         BuyBuilding(out CanBuy, playerData, nametoBuy,amount);
+
         if (CanBuy == false)
         {            
             return;
