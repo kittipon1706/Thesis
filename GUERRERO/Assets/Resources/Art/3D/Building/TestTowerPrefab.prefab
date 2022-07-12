@@ -60,6 +60,11 @@ MonoBehaviour:
   - Art/3D/Building/Sentry1Prefab
   - Art/3D/Building/Sentry2Prefab
   - Art/3D/Building/Sentry3Prefab
+  Barricade:
+  - 
+  - Art/3D/Building/Barricade1Prefab
+  - Art/3D/Building/Barricade2Prefab
+  - Art/3D/Building/Barricade3Prefab
   sentryCanvas: {fileID: 6831069221792918232}
   updateText: {fileID: 6831069222023624351}
   destroyText: {fileID: 6831069221446943641}

@@ -18,6 +18,7 @@ public class BuildingCore : MonoBehaviour
 
     public enum BuildingType
     {
+        none,
         Tower,
         Barricade,
         Trap
@@ -38,6 +39,7 @@ public class BuildingCore : MonoBehaviour
     PhotonView view;
     public BuildingData buildingData;
     public List<string> Sentry;
+    public List<string> Barricade;
     public Canvas sentryCanvas;
     public Button updateText;
     public Button destroyText;
@@ -47,8 +49,7 @@ public class BuildingCore : MonoBehaviour
     private void Start()
     {
         view = GetComponent<PhotonView>();
-        GameObject SentryBuild = PhotonNetwork.Instantiate(Sentry[buildingData.level], this.transform.position, Quaternion.identity, 0);
-        SentryBuild.transform.parent = buildingGrp.transform;
+        GenerateBuildingModel();
         sentryCanvas.gameObject.SetActive(false);
     }
 
@@ -85,7 +86,7 @@ public class BuildingCore : MonoBehaviour
 
         bool canmebuy = false;
         string nametoBuy = "";
-        MarketCore.Instance.BuyProcessing(out nametoBuy,out canmebuy, chaDataOwner, this.transform, buildingData.ownerID, buildingData.buildingName, MarketCore.marketType.Update , 1);
+        MarketCore.Instance.BuyProcessing(out nametoBuy,out canmebuy, chaDataOwner, this.transform, buildingData.ownerID, buildingData.buildingName, MarketCore.marketType.Update , 1, buildingData.buildingType);
         
         if (canmebuy == false)
         {
@@ -116,8 +117,21 @@ public class BuildingCore : MonoBehaviour
             PhotonNetwork.Destroy(target.gameObject);
         }
 
-        GameObject SentryBuild = PhotonNetwork.Instantiate(Sentry[buildingData.level], this.transform.position, Quaternion.identity, 0);
-        SentryBuild.transform.parent = buildingGrp.transform;
+        GenerateBuildingModel();
+    }
+
+    public void GenerateBuildingModel()
+    {
+        if (buildingData.buildingType == BuildingType.Tower)
+        {
+            GameObject SentryBuild = PhotonNetwork.Instantiate(Sentry[buildingData.level], this.transform.position, Quaternion.identity, 0);
+            SentryBuild.transform.parent = buildingGrp.transform;
+        }
+        else if (buildingData.buildingType == BuildingType.Barricade)
+        {
+            GameObject BarricadeBuild = PhotonNetwork.Instantiate(Barricade[buildingData.level], this.transform.position, Quaternion.identity, 0);
+            BarricadeBuild.transform.parent = buildingGrp.transform;
+        }
     }
 
     public void DeleteBuilding()

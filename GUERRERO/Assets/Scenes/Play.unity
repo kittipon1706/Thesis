@@ -688,6 +688,22 @@ MonoBehaviour:
     level: 3
     maxHealth: 40
     power: 35
+  - product_name: BarricadeLevel1
+    price: 20
+    level: 1
+    maxHealth: 40
+    power: 0
+  - product_name: BarricadeLevel2
+    price: 40
+    level: 2
+    maxHealth: 60
+    power: 0
+  - product_name: BarricadeLevel3
+    price: 60
+    level: 3
+    maxHealth: 85
+    power: 0
+  barricadeMarketDataList: []
 --- !u!4 &680328075
 Transform:
   m_ObjectHideFlags: 0

@@ -45,7 +45,18 @@ public class HumanControll : MonoBehaviour
             {
                 bool canmebuy = false;
                 string nametobuy = "";
-                MarketCore.Instance.BuyProcessing(out nametobuy,out canmebuy, CharacterCore.Instance.characterData, this.transform, view, "SentryLevel1", MarketCore.marketType.Buy, 1);
+                MarketCore.Instance.BuyProcessing(out nametobuy,out canmebuy, CharacterCore.Instance.characterData, this.transform, view, "SentryLevel1", MarketCore.marketType.Buy, 1, BuildingCore.BuildingType.Tower);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                //Debug.Log("HoloGram Render Barricade");
+            }
+            if (Input.GetKeyUp(KeyCode.Q))
+            {
+                bool canmebuy = false;
+                string nametobuy = "";
+                MarketCore.Instance.BuyProcessing(out nametobuy, out canmebuy, CharacterCore.Instance.characterData, this.transform, view, "BarricadeLevel1", MarketCore.marketType.Buy, 1, BuildingCore.BuildingType.Barricade);
             }
 
         }

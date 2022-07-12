@@ -33,6 +33,7 @@ public class MarketCore : MonoBehaviour
     }
 
     public List<Building> buildingDataList = new List<Building>();
+    public List<Building> barricadeMarketDataList = new List<Building>();
 
     public void BuyBuilding( out bool CanBuy, CharacterCore.CharacterData playerData, string nametoBuy ,float amount)
     {
@@ -55,15 +56,17 @@ public class MarketCore : MonoBehaviour
         
     }
 
-    public void BuildSomething(Transform buildTarget, PhotonView view, string nametoBuy, CharacterCore.CharacterData playerData)
+    public void BuildSomething(Transform buildTarget, PhotonView view, string nametoBuy, CharacterCore.CharacterData playerData, BuildingCore.BuildingType buildingType)
     {
         GameObject building = PhotonNetwork.Instantiate(("Art/3D/Building/TestTowerPrefab"), buildTarget.position, Quaternion.identity, 0);
+        
         building.name = nametoBuy;
         building.GetComponent<BuildingCore>().buildingData.ownerID = view;
         building.GetComponent<BuildingCore>().buildingData.buildingName = nametoBuy;
         building.GetComponent<BuildingCore>().chaDataOwner = playerData;
-
+        building.GetComponent<BuildingCore>().buildingData.buildingType = buildingType;
         int i = 0;
+
         foreach (Building target in buildingDataList)
         {
             if (target.product_name == nametoBuy)
@@ -79,7 +82,7 @@ public class MarketCore : MonoBehaviour
         }
     }
 
-    public void BuyProcessing( out string nametobuy,out bool CanBuy, CharacterCore.CharacterData playerData, Transform buildTarget, PhotonView view, string currentname, marketType marKetType, int amount)
+    public void BuyProcessing( out string nametobuy,out bool CanBuy, CharacterCore.CharacterData playerData, Transform buildTarget, PhotonView view, string currentname, marketType marKetType, int amount,BuildingCore.BuildingType buildingType)
     {
         CanBuy = false;
         nametobuy = "";
@@ -119,7 +122,7 @@ public class MarketCore : MonoBehaviour
 
         if (marKetType == marketType.Buy)
         {
-            BuildSomething(buildTarget, view, nametoBuy, playerData);
+            BuildSomething(buildTarget, view, nametoBuy, playerData,buildingType );
         }
         else
         {
