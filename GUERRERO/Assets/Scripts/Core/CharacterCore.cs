@@ -22,7 +22,7 @@ public class CharacterCore : MonoBehaviour
         public float currentHealth;
         public float damage;
         public float armor;
-        public int coin;
+        public float coin;
     }    
 
     //-------Singleton

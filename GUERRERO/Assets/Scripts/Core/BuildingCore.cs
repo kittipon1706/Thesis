@@ -22,69 +22,106 @@ public class BuildingCore : MonoBehaviour
         Barricade,
         Trap
     }
-    
+
     [System.Serializable]
     public class BuildingData
     {
-        public string ownerID;
+        public string buildingName;
+        public PhotonView ownerID;
         public int level;
         public BuildingType buildingType;
         public int currentHealth;
         public int maxHealth;
-    }    
+        public float power;
+    }
 
     PhotonView view;
     public BuildingData buildingData;
     public List<string> Sentry;
-    
+    public Canvas sentryCanvas;
+    public Button updateText;
+    public Button destroyText;
+    public GameObject buildingGrp;
+    public CharacterCore.CharacterData chaDataOwner;
 
     private void Start()
     {
-        view = GetComponent<PhotonView>();        
-        GameObject SentryBuild = PhotonNetwork.Instantiate(Sentry[buildingData.level], this.transform.position , Quaternion.identity, 0);
-        SentryBuild.transform.parent = gameObject.transform;
+        view = GetComponent<PhotonView>();
+        GameObject SentryBuild = PhotonNetwork.Instantiate(Sentry[buildingData.level], this.transform.position, Quaternion.identity, 0);
+        SentryBuild.transform.parent = buildingGrp.transform;
+        sentryCanvas.gameObject.SetActive(false);
     }
 
     void OnTriggerEnter(Collider other)
-    {   
+    {
         if (other.tag == "Player")
         {
             string viewID = other.GetComponent<PhotonView>().ToString();
 
-            if (buildingData.ownerID == viewID)
+            if (buildingData.ownerID.ToString() == viewID)
             {
-                Button update_Button = UiCore.Instance.updateBuilding_Button;
+                /*Button update_Button = UiCore.Instance.updateBuilding_Button;
                 update_Button.gameObject.SetActive(true);
                 string id = view.ToString();
-                update_Button.onClick.AddListener(delegate { UpLevelBuilding(id); });
+                update_Button.onClick.AddListener(delegate { UpLevelBuilding(id); });*/
+                sentryCanvas.gameObject.SetActive(true);
             }
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        UiCore.Instance.updateBuilding_Button.gameObject.SetActive(false);
+        //UiCore.Instance.updateBuilding_Button.gameObject.SetActive(false);
+        sentryCanvas.gameObject.SetActive(false);
     }
 
-    private void UpLevelBuilding(string id)
+    public void UpLevelBuilding()
     {
-        if (id != this.view.ToString())
-        {
-            return;
-        }
         if (buildingData.level >= 3)
         {
+            Debug.Log("Level >= 3");
             return;
         }
 
-        buildingData.level++;
+        bool canmebuy = false;
+        string nametoBuy = "";
+        MarketCore.Instance.BuyProcessing(out nametoBuy,out canmebuy, chaDataOwner, this.transform, buildingData.ownerID, buildingData.buildingName, MarketCore.marketType.Update , 1);
+        
+        if (canmebuy == false)
+        {
+            return;
+        }
 
-        foreach (Transform target in this.gameObject.transform)
+        int i = 0;
+        foreach (MarketCore.Building target in MarketCore.Instance.buildingDataList)
+        {
+            Debug.Log(nametoBuy);
+            if (nametoBuy == target.product_name)
+            {
+                buildingData.level = MarketCore.Instance.buildingDataList[i].level;
+                buildingData.buildingName = MarketCore.Instance.buildingDataList[i].product_name;
+                buildingData.maxHealth = MarketCore.Instance.buildingDataList[i].maxHealth;
+                buildingData.power = MarketCore.Instance.buildingDataList[i].power;
+                this.gameObject.name = nametoBuy;
+                break;
+            }
+            else
+            {
+                i++;
+            }
+        }
+
+        foreach (Transform target in buildingGrp.transform)
         {
             PhotonNetwork.Destroy(target.gameObject);
         }
 
         GameObject SentryBuild = PhotonNetwork.Instantiate(Sentry[buildingData.level], this.transform.position, Quaternion.identity, 0);
-        SentryBuild.transform.parent = gameObject.transform;
+        SentryBuild.transform.parent = buildingGrp.transform;
+    }
+
+    public void DeleteBuilding()
+    {
+        Destroy(this.gameObject);
     }
 }

@@ -12,7 +12,6 @@ public class HumanControll : MonoBehaviour
 
      float directionY;
 
-    public GameObject buildingPrefabTest;//---------------------------Delete IT
     public Transform buildPoint;
 
     private void Start()
@@ -44,8 +43,9 @@ public class HumanControll : MonoBehaviour
             }
             if (Input.GetKeyUp(KeyCode.E))
             {
-               GameObject building = PhotonNetwork.Instantiate(("Art/3D/Building/TestTowerPrefab"), buildPoint.position, Quaternion.identity, 0);
-                building.GetComponent<BuildingCore>().buildingData.ownerID = view.ToString();                
+                bool canmebuy = false;
+                string nametobuy = "";
+                MarketCore.Instance.BuyProcessing(out nametobuy,out canmebuy, CharacterCore.Instance.characterData, this.transform, view, "SentryLevel1", MarketCore.marketType.Buy, 1);
             }
 
         }
