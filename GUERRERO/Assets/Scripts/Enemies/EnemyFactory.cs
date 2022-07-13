@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
 
 public class EnemyFactory : MonoBehaviour
@@ -13,7 +12,7 @@ public class EnemyFactory : MonoBehaviour
     {
         public GameObject model;
         public Avatar avatar;
-        public AnimatorController animator;
+        public RuntimeAnimatorController animator;
     }
 
     public List<EnemyList> EnemyLists;
