@@ -63,9 +63,7 @@ public class BuildingCore : MonoBehaviourPunCallbacks
     {
         if (other.tag == "Player")
         {
-            string otherName = other.name;
-
-            if (buildingData.ownerName == otherName)
+            if (other.name == buildingData.ownerName)
             {
                 sentryCanvas.gameObject.SetActive(true);
             }
@@ -94,38 +92,16 @@ public class BuildingCore : MonoBehaviourPunCallbacks
             return;
         }
 
-        int i = 0;
-        foreach (MarketCore.Building target in MarketCore.Instance.buildingDataList)
-        {
-            if (nametoBuy == target.product_name)
-            {
-                buildingData.level = MarketCore.Instance.buildingDataList[i].level;
-                int j = i - 1;
-                buildingData.currentHealth = buildingData.currentHealth + (MarketCore.Instance.buildingDataList[i].maxHealth - MarketCore.Instance.buildingDataList[j].maxHealth);
-                buildingData.buildingName = MarketCore.Instance.buildingDataList[i].product_name;
-                buildingData.maxHealth = MarketCore.Instance.buildingDataList[i].maxHealth;
-                buildingData.power = MarketCore.Instance.buildingDataList[i].power;
-                this.gameObject.name = nametoBuy;
-                break;
-            }
-            else
-            {
-                i++;
-            }
-        }
-
-        ShowCurrentHealth();
-        foreach (Transform target in buildingGrp.transform)
-        {
-            PhotonNetwork.Destroy(target.gameObject);
-        }
+        //ShowCurrentHealth();
+        view.RPC("DeleteBuildingGrp", RpcTarget.All);        
 
         GenerateBuildingModel();
+        ShowCurrentHealth();
     }
 
     public void DeleteBuilding_Click()
     {
-        view.RPC("DeleteBuilding", RpcTarget.AllBuffered);
+        view.RPC("DeleteBuilding", RpcTarget.All);
     }
 
     public void GenerateBuildingModel()
@@ -133,20 +109,18 @@ public class BuildingCore : MonoBehaviourPunCallbacks
         if (buildingData.buildingType == BuildingType.Tower)
         {
             GenerateBuuild = PhotonNetwork.Instantiate(Sentry[buildingData.level], this.transform.position, Quaternion.identity, 0);
-            //SentryBuild.transform.parent = buildingGrp.transform;
         }
         else if (buildingData.buildingType == BuildingType.Barricade)
         {
             GenerateBuuild  = PhotonNetwork.Instantiate(Barricade[buildingData.level], this.transform.position, Quaternion.identity, 0);
-            //BarricadeBuild.transform.parent = buildingGrp.transform;
         }
         else if (buildingData.buildingType == BuildingType.Trap)
         {
             GenerateBuuild = PhotonNetwork.Instantiate(Trap[buildingData.level], this.transform.position, Quaternion.identity, 0);
-            //TrapBuild.transform.parent = buildingGrp.transform;
         }
 
-        view.RPC("SetBuildingChild", RpcTarget.All);
+        Debug.Log(buildingGrp.name);
+        GenerateBuuild.transform.parent = buildingGrp.transform;
     }
 
 
@@ -173,18 +147,12 @@ public class BuildingCore : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    public void SetBuildingChild()
+    public void DeleteBuildingGrp()
     {
-        /* if (GenerateBuuild == null)
-         {
-             Debug.Log("GENERATE NULL"); 
-         }
-         if (buildingGrp == null)
-         {
-             Debug.Log("BUILDINGGRP NULL");
-         }
-         GenerateBuuild.transform.parent = buildingGrp.transform;*/
-        GenerateBuuild.transform.SetParent(buildingGrp.transform);
+        foreach (Transform target in buildingGrp.transform)
+        {
+            PhotonNetwork.Destroy(target.gameObject);
+        }
     }
 
     public void ShowCurrentHealth()

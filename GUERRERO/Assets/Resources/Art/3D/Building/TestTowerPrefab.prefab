@@ -434,7 +434,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6647911282900577610}
         m_TargetAssemblyTypeName: BuildingCore, Assembly-CSharp
-        m_MethodName: DeleteBuilding
+        m_MethodName: DeleteBuilding_Click
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

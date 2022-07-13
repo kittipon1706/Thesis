@@ -33,7 +33,7 @@ public class MarketCore : MonoBehaviourPun
     }
 
     public List<Building> buildingDataList = new List<Building>();
-    public string aview = null;
+    public string ownerName = "";
     public CharacterCore.CharacterData aplayerData = null;
     public BuildingCore.BuildingType abuildingType = BuildingCore.BuildingType.none;
 
@@ -55,28 +55,27 @@ public class MarketCore : MonoBehaviourPun
                 CanBuy = false;
             }
         }
-        Debug.Log(CanBuy);
     }
-    public void BuildSomething(Transform buildTarget, string ownerNAme, string nametoBuy, CharacterCore.CharacterData playerData, BuildingCore.BuildingType buildingType)
+    public void BuildSomething(Transform buildTarget, string ownerNAme, string nametoBuy, CharacterCore.CharacterData playerData, BuildingCore.BuildingType buildingType, marketType marKetType)
     {
         GameObject building = PhotonNetwork.Instantiate(("Art/3D/Building/TestTowerPrefab"), buildTarget.position, Quaternion.identity, 0);
 
         //building.name = nametoBuy;
 
-        aview = ownerNAme;
+        ownerName = ownerNAme;
         aplayerData = playerData;
         abuildingType = buildingType;
         var type = buildingType;
         PhotonView photonView1 = this.GetComponent<PhotonView>();
-        photonView1.RPC("BuildProcessing", RpcTarget.All, building.name, nametoBuy, type);
+        photonView1.RPC("BuildProcessing", RpcTarget.All, building.name, nametoBuy, type, ownerName, marKetType);
     }
 
     [PunRPC]
-    void BuildProcessing(string nameobj, string nametochange, BuildingCore.BuildingType buildingType)
+    void BuildProcessing(string nameobj, string nametochange, BuildingCore.BuildingType buildingType, string owenername, marketType marKetType)
     {
         GameObject G = GameObject.Find(nameobj);
         G.name = nametochange;
-        G.gameObject.GetComponent<BuildingCore>().buildingData.ownerName = aview;
+        G.gameObject.GetComponent<BuildingCore>().buildingData.ownerName = owenername;
         G.gameObject.GetComponent<BuildingCore>().buildingData.buildingName = nametochange;
         G.gameObject.GetComponent<BuildingCore>().buildingData.buildingType = buildingType;
         G.gameObject.GetComponent<BuildingCore>().chaDataOwner = aplayerData;
@@ -87,10 +86,21 @@ public class MarketCore : MonoBehaviourPun
         {
             if (target.product_name == nametochange)
             {
-                G.gameObject.GetComponent<BuildingCore>().buildingData.level = buildingDataList[i].level;
-                G.gameObject.GetComponent<BuildingCore>().buildingData.currentHealth = buildingDataList[i].maxHealth;
+                G.gameObject.GetComponent<BuildingCore>().buildingData.level = buildingDataList[i].level;                
                 G.gameObject.GetComponent<BuildingCore>().buildingData.maxHealth = buildingDataList[i].maxHealth;
                 G.gameObject.GetComponent<BuildingCore>().buildingData.power = buildingDataList[i].power;
+                if (marKetType == marketType.Update)
+                {
+                    int j = i - 1;
+                    float currenthealth = G.gameObject.GetComponent<BuildingCore>().buildingData.currentHealth;
+                    float XXX = MarketCore.Instance.buildingDataList[i].maxHealth;
+                    float YYY = MarketCore.Instance.buildingDataList[j].maxHealth;
+                    G.gameObject.GetComponent<BuildingCore>().buildingData.currentHealth = currenthealth + (XXX - YYY);
+                }
+                else if (marKetType == marketType.Buy)
+                {
+                    G.gameObject.GetComponent<BuildingCore>().buildingData.currentHealth = buildingDataList[i].maxHealth;
+                }
             }
             else
             {
@@ -98,14 +108,13 @@ public class MarketCore : MonoBehaviourPun
             }
         }
 
-        aview = null;
+        ownerName = "";
         aplayerData = null;
         abuildingType = BuildingCore.BuildingType.none;
     }
 
     public void BuyProcessing(out string nametobuy, out bool CanBuy, CharacterCore.CharacterData playerData, Transform buildTarget, string ownerNAme, string currentname, marketType marKetType, int amount, BuildingCore.BuildingType buildingType)
     {
-        Debug.Log("asdasda");
         CanBuy = false;
         nametobuy = "";
         int i = 0;
@@ -131,7 +140,6 @@ public class MarketCore : MonoBehaviourPun
                 }
             }
         }
-
         else if (marKetType == marketType.Buy)
         {
             nametoBuy = currentname;
@@ -146,11 +154,15 @@ public class MarketCore : MonoBehaviourPun
 
         if (marKetType == marketType.Buy)
         {
-            BuildSomething(buildTarget, ownerNAme, nametoBuy, playerData, buildingType);
+            BuildSomething(buildTarget, ownerNAme, nametoBuy, playerData, buildingType, marKetType);
         }
-        else
+        else if(marKetType == marketType.Update)
         {
+            aplayerData = playerData;
             nametobuy = nametoBuy;
+            ownerName = ownerNAme;
+            PhotonView photonView1 = this.GetComponent<PhotonView>();
+            photonView1.RPC("BuildProcessing", RpcTarget.All, currentname, nametobuy, buildingType, ownerName, marKetType);
             return;
         }
     }
