@@ -45,10 +45,6 @@ public class PlayCore : MonoBehaviour
     [SerializeField] Material red;
     [SerializeField] Material blue;
 
-    //Debuger Text
-    //[SerializeField] Text DebugerText;
-
-
     private void Start()
     {
         view = GetComponent<PhotonView>();
@@ -61,20 +57,23 @@ public class PlayCore : MonoBehaviour
             GameObject house1tmp;
             SpwanObj(spawnHouseBaseTarget1, houseBasePrefab, ObjType.BaseHouse, out house1tmp);
 
-            view.RPC("ChangeTexter", RpcTarget.All, player1tmp.name, 0, 0);
-            view.RPC("ChangeTexter", RpcTarget.All, house1tmp.name, 0, 0);
+            string mastername = PlayerPrefs.GetString("MasterPlayername");
+
+            view.RPC("ChangeName", RpcTarget.All, player1tmp.name,"Player",true , mastername);
+            view.RPC("ChangeName", RpcTarget.All, house1tmp.name,"House",true , mastername);
         }
         else if (!PhotonNetwork.IsMasterClient)
         {
-            GameObject player1tmp;
-            SpwanObj(spawnPlayerTarget2, playerPrefab, ObjType.Player, out player1tmp);
+            GameObject player2tmp;
+            SpwanObj(spawnPlayerTarget2, playerPrefab, ObjType.Player, out player2tmp);
 
-            GameObject house1tmp;
-            SpwanObj(spawnHouseBaseTarget2, houseBasePrefab, ObjType.BaseHouse, out house1tmp);
+            GameObject house2tmp;
+            SpwanObj(spawnHouseBaseTarget2, houseBasePrefab, ObjType.BaseHouse, out house2tmp);
 
-            view.RPC("ChangeTexter", RpcTarget.All, player1tmp.name, 0, 1);
+            string minorname = PlayerPrefs.GetString("MinorPlayername");
 
-            view.RPC("ChangeTexter", RpcTarget.All, house1tmp.name, 0, 1);
+            view.RPC("ChangeName", RpcTarget.All, player2tmp.name, "Player",false , minorname);
+            view.RPC("ChangeName", RpcTarget.All, house2tmp.name, "House",false , minorname);
         }
 
     }
@@ -98,17 +97,23 @@ public class PlayCore : MonoBehaviour
     public void SpwanObj(GameObject target, GameObject ObjPrefab, ObjType type, out GameObject myObj)
     {
         GameObject OBJ = PhotonNetwork.Instantiate(ObjPrefab.name, target.transform.position, Quaternion.identity);
-        //view.RPC("ChangeName", RpcTarget.All, OBJ.name, type.ToString());
         myObj = OBJ;
     }
 
     [PunRPC]
-    public void ChangeName(string objname, string objType)
+    public void ChangeName(string objname, string objType, bool ismaster,string nametochange)
     {
         GameObject obj = GameObject.Find(objname);
-       // DebugerText.text = ServerCore.Instance.namePlayer;
-        string newName = ServerCore.Instance.namePlayer + "_" + objType;
-        obj.name = newName;
+        if (ismaster == true)
+        {
+            string newName = nametochange + "_" + objType;
+            obj.name = newName;
+        }
+        else if (ismaster == false)
+        {
+            string newName = nametochange + "_" + objType;
+            obj.name = newName;
+        }       
 
     }
 }

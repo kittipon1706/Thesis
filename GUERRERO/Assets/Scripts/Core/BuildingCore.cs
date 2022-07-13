@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine.UI;
 
-public class BuildingCore : MonoBehaviour
+public class BuildingCore : MonoBehaviourPunCallbacks
 {
     public static BuildingCore Instance;
 
@@ -28,7 +29,7 @@ public class BuildingCore : MonoBehaviour
     public class BuildingData
     {
         public string buildingName;
-        public PhotonView ownerID;
+        public string ownerName;
         public int level;
         public BuildingType buildingType;
         public float currentHealth;
@@ -48,6 +49,8 @@ public class BuildingCore : MonoBehaviour
     public CharacterCore.CharacterData chaDataOwner;
     public Text overhead_HealthText ;
 
+    private GameObject GenerateBuuild;
+
     private void Start()
     {
         view = GetComponent<PhotonView>();
@@ -60,14 +63,10 @@ public class BuildingCore : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            string viewID = other.GetComponent<PhotonView>().ToString();
+            string otherName = other.name;
 
-            if (buildingData.ownerID.ToString() == viewID)
+            if (buildingData.ownerName == otherName)
             {
-                /*Button update_Button = UiCore.Instance.updateBuilding_Button;
-                update_Button.gameObject.SetActive(true);
-                string id = view.ToString();
-                update_Button.onClick.AddListener(delegate { UpLevelBuilding(id); });*/
                 sentryCanvas.gameObject.SetActive(true);
             }
         }
@@ -75,11 +74,10 @@ public class BuildingCore : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        //UiCore.Instance.updateBuilding_Button.gameObject.SetActive(false);
         sentryCanvas.gameObject.SetActive(false);
     }
 
-    public void UpLevelBuilding()
+    public void UpLevelBuilding_Click()
     {
         if (buildingData.level >= 3)
         {
@@ -89,8 +87,8 @@ public class BuildingCore : MonoBehaviour
 
         bool canmebuy = false;
         string nametoBuy = "";
-        MarketCore.Instance.BuyProcessing(out nametoBuy,out canmebuy, chaDataOwner, this.transform, buildingData.ownerID, buildingData.buildingName, MarketCore.marketType.Update , 1, buildingData.buildingType);
-        
+        MarketCore.Instance.BuyProcessing(out nametoBuy,out canmebuy, chaDataOwner, this.transform, buildingData.ownerName, buildingData.buildingName, MarketCore.marketType.Update , 1, buildingData.buildingType);
+
         if (canmebuy == false)
         {
             return;
@@ -125,24 +123,32 @@ public class BuildingCore : MonoBehaviour
         GenerateBuildingModel();
     }
 
+    public void DeleteBuilding_Click()
+    {
+        view.RPC("DeleteBuilding", RpcTarget.AllBuffered);
+    }
+
     public void GenerateBuildingModel()
     {
         if (buildingData.buildingType == BuildingType.Tower)
         {
-            GameObject SentryBuild = PhotonNetwork.Instantiate(Sentry[buildingData.level], this.transform.position, Quaternion.identity, 0);
-            SentryBuild.transform.parent = buildingGrp.transform;
+            GenerateBuuild = PhotonNetwork.Instantiate(Sentry[buildingData.level], this.transform.position, Quaternion.identity, 0);
+            //SentryBuild.transform.parent = buildingGrp.transform;
         }
         else if (buildingData.buildingType == BuildingType.Barricade)
         {
-            GameObject BarricadeBuild = PhotonNetwork.Instantiate(Barricade[buildingData.level], this.transform.position, Quaternion.identity, 0);
-            BarricadeBuild.transform.parent = buildingGrp.transform;
+            GenerateBuuild  = PhotonNetwork.Instantiate(Barricade[buildingData.level], this.transform.position, Quaternion.identity, 0);
+            //BarricadeBuild.transform.parent = buildingGrp.transform;
         }
         else if (buildingData.buildingType == BuildingType.Trap)
         {
-            GameObject BarricadeBuild = PhotonNetwork.Instantiate(Trap[buildingData.level], this.transform.position, Quaternion.identity, 0);
-            BarricadeBuild.transform.parent = buildingGrp.transform;
+            GenerateBuuild = PhotonNetwork.Instantiate(Trap[buildingData.level], this.transform.position, Quaternion.identity, 0);
+            //TrapBuild.transform.parent = buildingGrp.transform;
         }
+
+        view.RPC("SetBuildingChild", RpcTarget.All);
     }
+
 
     public void TakeDanage(float damange)
     {
@@ -151,7 +157,7 @@ public class BuildingCore : MonoBehaviour
             buildingData.currentHealth = buildingData.currentHealth - damange;
             if (buildingData.currentHealth <= 0)
             {
-                Destroy(this.gameObject);
+                view.RPC("DeleteBuilding", RpcTarget.All);
             }
             else
             {
@@ -160,9 +166,25 @@ public class BuildingCore : MonoBehaviour
         }
     }
 
+    [PunRPC]
     public void DeleteBuilding()
-    {
+    {        
         Destroy(this.gameObject);
+    }
+
+    [PunRPC]
+    public void SetBuildingChild()
+    {
+        /* if (GenerateBuuild == null)
+         {
+             Debug.Log("GENERATE NULL"); 
+         }
+         if (buildingGrp == null)
+         {
+             Debug.Log("BUILDINGGRP NULL");
+         }
+         GenerateBuuild.transform.parent = buildingGrp.transform;*/
+        GenerateBuuild.transform.SetParent(buildingGrp.transform);
     }
 
     public void ShowCurrentHealth()

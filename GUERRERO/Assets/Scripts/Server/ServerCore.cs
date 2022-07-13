@@ -65,12 +65,14 @@ public class ServerCore : MonoBehaviourPunCallbacks
     public void ClickCreateRoom()
     {
         PhotonNetwork.CreateRoom(createInput.text , new Photon.Realtime.RoomOptions() { MaxPlayers = 2});
+        PlayerPrefs.SetString("MasterPlayername", "ALPHA");
     }
 
 
     public void ClickJoinRoom()
     {
-        PhotonNetwork.JoinRoom(joinInput.text);        
+        PhotonNetwork.JoinRoom(joinInput.text);
+        PlayerPrefs.SetString("MinorPlayername", "BRAVO");
     }
 
     public void ClickConnect()
