@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class HumanControll : MonoBehaviour
+public class HumanControll : MonoBehaviourPun
 {
      PhotonView view;
      float inputX;
@@ -45,7 +45,7 @@ public class HumanControll : MonoBehaviour
             {
                 bool canmebuy = false;
                 string nametobuy = "";
-                MarketCore.Instance.BuyProcessing(out nametobuy,out canmebuy, CharacterCore.Instance.characterData, this.transform, view, "SentryLevel1", MarketCore.marketType.Buy, 1, BuildingCore.BuildingType.Tower);
+                MarketCore.Instance.BuyProcessing(out nametobuy,out canmebuy, CharacterCore.Instance.characterData, this.transform, this.gameObject.name, "SentryLevel1", MarketCore.marketType.Buy, 1, BuildingCore.BuildingType.Tower);
             }
             if (Input.GetKeyDown(KeyCode.Q))
             {
@@ -55,7 +55,7 @@ public class HumanControll : MonoBehaviour
             {
                 bool canmebuy = false;
                 string nametobuy = "";
-                MarketCore.Instance.BuyProcessing(out nametobuy, out canmebuy, CharacterCore.Instance.characterData, this.transform, view, "BarricadeLevel1", MarketCore.marketType.Buy, 1, BuildingCore.BuildingType.Barricade);
+                MarketCore.Instance.BuyProcessing(out nametobuy, out canmebuy, CharacterCore.Instance.characterData, this.transform, this.gameObject.name, "BarricadeLevel1", MarketCore.marketType.Buy, 1, BuildingCore.BuildingType.Barricade);
             }
             if (Input.GetKeyDown(KeyCode.F))
             {
@@ -65,7 +65,7 @@ public class HumanControll : MonoBehaviour
             {
                 bool canmebuy = false;
                 string nametobuy = "";
-                MarketCore.Instance.BuyProcessing(out nametobuy, out canmebuy, CharacterCore.Instance.characterData, this.transform, view, "TrapLevel1", MarketCore.marketType.Buy, 1, BuildingCore.BuildingType.Trap);
+                MarketCore.Instance.BuyProcessing(out nametobuy, out canmebuy, CharacterCore.Instance.characterData, this.transform, this.gameObject.name, "TrapLevel1", MarketCore.marketType.Buy, 1, BuildingCore.BuildingType.Trap);
             }
 
         }

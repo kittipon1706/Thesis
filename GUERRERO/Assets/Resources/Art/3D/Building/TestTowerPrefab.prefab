@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildingData:
     buildingName: 
-    ownerID: {fileID: 0}
+    ownerName: 
     level: 1
     buildingType: 1
     currentHealth: 0
@@ -669,7 +669,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6647911282900577610}
         m_TargetAssemblyTypeName: BuildingCore, Assembly-CSharp
-        m_MethodName: UpLevelBuilding
+        m_MethodName: UpLevelBuilding_Click
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

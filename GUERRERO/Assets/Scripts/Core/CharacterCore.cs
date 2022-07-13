@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 
-public class CharacterCore : MonoBehaviour
+public class CharacterCore : MonoBehaviourPun
 {
     [System.Serializable]
     public class CharacterData
@@ -57,6 +57,7 @@ public class CharacterCore : MonoBehaviour
             }
         }
     }
+
 
     void Update()
     {
