@@ -20,6 +20,8 @@ public class UiCore : MonoBehaviour
     public GameObject MarketPanel;
     public GameObject ButtonBoxs;
     public Button productButton;
+    public Text healthText_detail;
+    public Text powerText_detail;
 
     CharacterCore.CharacterData characterData;
 
@@ -55,7 +57,7 @@ public class UiCore : MonoBehaviour
                 GameObject newButt = Instantiate(productButton.gameObject, ButtonBoxs.transform);
                 newButt.name = Target.product_name;
                 ButtItemSetting itemSetting = newButt.GetComponent<ButtItemSetting>();
-                itemSetting.SetData(Target.product_name, MarketCore.marketType.Buy, Target.BuildType,Target.price);
+                itemSetting.SetData(Target.product_name, MarketCore.marketType.Buy, Target.BuildType,Target.price, Target.maxHealth,Target.power);
 
                 GameObject aText = newButt.transform.GetChild(0).gameObject;
                 Text buttText = aText.GetComponent<Text>();
@@ -70,5 +72,11 @@ public class UiCore : MonoBehaviour
         {
             Destroy(target.gameObject);
         }
+    }
+
+    public void ShowDetail(float health, float power)
+    {
+        healthText_detail.text = "HEALTH :"+ health.ToString();
+        powerText_detail.text = "POWER :"+ power.ToString();
     }
 }

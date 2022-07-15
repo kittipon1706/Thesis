@@ -10,12 +10,18 @@ public class ButtItemSetting : MonoBehaviour
     public BuildingCore.BuildingType ButtBuildingType;
     public Text priceText;
 
-    public void SetData(string NameSetting, MarketCore.marketType marketTypeSetting, BuildingCore.BuildingType BuildingTypeSetting,float price)
+    float health;
+    float power;
+
+    public void SetData(string NameSetting, MarketCore.marketType marketTypeSetting, BuildingCore.BuildingType BuildingTypeSetting,float price,float ahealth,float apower)
     {
         Buttname = NameSetting;
         ButtmarketType = marketTypeSetting;
         ButtBuildingType = BuildingTypeSetting;
         priceText.text = "$"+ price.ToString();
+
+        health = ahealth;
+        power = apower;
     }
 
     public void Click()
@@ -23,5 +29,15 @@ public class ButtItemSetting : MonoBehaviour
         bool canmebuy = false;
         string nametobuy = "";
         MarketCore.Instance.BuyProcessing(out nametobuy, out canmebuy, CharacterCore.Instance.characterData, CharacterCore.Instance.buildPoint, CharacterCore.Instance.name, Buttname, ButtmarketType, 1, ButtBuildingType);
+    }
+
+    public void HoverDetail()
+    {
+        UiCore.Instance.ShowDetail(health, power);
+    }
+
+    public void HoverExit()
+    {
+        UiCore.Instance.ShowDetail(0, 0);
     }
 }
