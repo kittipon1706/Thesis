@@ -17,13 +17,16 @@ public class UiCore : MonoBehaviour
 
     public Text healthText;
     public Text coinText;
-    public Button updateBuilding_Button;
+    public GameObject MarketPanel;
+    public GameObject ButtonBoxs;
+    public Button productButton;
 
     CharacterCore.CharacterData characterData;
 
     private void Start()
     {
-        updateBuilding_Button.gameObject.SetActive(false);
+        MarketPanel.SetActive(false);
+        buildMarketButton();
     }
 
     private void FixedUpdate()
@@ -34,5 +37,25 @@ public class UiCore : MonoBehaviour
         }
         healthText.text = "HEALTH :" + characterData.currentHealth.ToString();
         coinText.text = "COIN :" + characterData.coin.ToString();
+    }
+
+    private void buildMarketButton()
+    {
+        foreach (var Target in MarketCore.Instance.buildingDataList)
+        {
+            if (Target.product_name != "0")
+            {
+                GameObject newButt = Instantiate(productButton.gameObject, ButtonBoxs.transform);
+                newButt.name = Target.product_name;
+                ButtItemSetting itemSetting = newButt.GetComponent<ButtItemSetting>();
+                itemSetting.SetData(Target.product_name, MarketCore.marketType.Buy, Target.BuildType);
+
+                GameObject aText = newButt.transform.GetChild(0).gameObject;
+                Text buttText = aText.GetComponent<Text>();
+                buttText.text = Target.product_name;
+
+
+            }            
+        }
     }
 }

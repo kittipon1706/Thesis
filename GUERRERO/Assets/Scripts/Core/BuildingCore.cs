@@ -49,7 +49,7 @@ public class BuildingCore : MonoBehaviourPunCallbacks
     public CharacterCore.CharacterData chaDataOwner;
     public Text overhead_HealthText ;
 
-    private GameObject GenerateBuuild;
+    //private GameObject GenerateBuuild;
 
     private void Start()
     {
@@ -93,7 +93,7 @@ public class BuildingCore : MonoBehaviourPunCallbacks
         }
 
         //ShowCurrentHealth();
-        view.RPC("DeleteBuildingGrp", RpcTarget.All);        
+        view.RPC("DeleteBuildingGrp", RpcTarget.All);
 
         GenerateBuildingModel();
         ShowCurrentHealth();
@@ -106,21 +106,28 @@ public class BuildingCore : MonoBehaviourPunCallbacks
 
     public void GenerateBuildingModel()
     {
+        Debug.Log("GENerate Model");
         if (buildingData.buildingType == BuildingType.Tower)
         {
-            GenerateBuuild = PhotonNetwork.Instantiate(Sentry[buildingData.level], this.transform.position, Quaternion.identity, 0);
+            GameObject GenerateBuuild = PhotonNetwork.Instantiate(Sentry[buildingData.level], this.transform.position, Quaternion.identity, 0);
+            GenerateBuuild.GetComponent<SetUpBuilding>().buildingGrp = buildingGrp;
+            return;
         }
         else if (buildingData.buildingType == BuildingType.Barricade)
         {
-            GenerateBuuild  = PhotonNetwork.Instantiate(Barricade[buildingData.level], this.transform.position, Quaternion.identity, 0);
+            GameObject GenerateBuuild = PhotonNetwork.Instantiate(Barricade[buildingData.level], this.transform.position, Quaternion.identity, 0);
+            GenerateBuuild.GetComponent<SetUpBuilding>().buildingGrp = buildingGrp;
+            return;
         }
         else if (buildingData.buildingType == BuildingType.Trap)
         {
-            GenerateBuuild = PhotonNetwork.Instantiate(Trap[buildingData.level], this.transform.position, Quaternion.identity, 0);
+            GameObject GenerateBuuild = PhotonNetwork.Instantiate(Trap[buildingData.level], this.transform.position, Quaternion.identity, 0);
+            GenerateBuuild.GetComponent<SetUpBuilding>().buildingGrp = buildingGrp;
+            return;
         }
-
-        Debug.Log(buildingGrp.name);
-        GenerateBuuild.transform.parent = buildingGrp.transform;
+        
+       // Debug.Log(buildingGrp.name);
+        //GenerateBuuild.transform.parent = buildingGrp.transform;
     }
 
 
@@ -151,6 +158,7 @@ public class BuildingCore : MonoBehaviourPunCallbacks
     {
         foreach (Transform target in buildingGrp.transform)
         {
+            Debug.Log(target.gameObject.name);
             PhotonNetwork.Destroy(target.gameObject);
         }
     }

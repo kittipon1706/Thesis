@@ -24,6 +24,7 @@ public class MarketCore : MonoBehaviourPun
         public int level;
         public float maxHealth;
         public float power;
+        public BuildingCore.BuildingType BuildType;
     }
 
     public enum marketType
@@ -36,6 +37,7 @@ public class MarketCore : MonoBehaviourPun
     public string ownerName = "";
     public CharacterCore.CharacterData aplayerData = null;
     public BuildingCore.BuildingType abuildingType = BuildingCore.BuildingType.none;
+    public GameObject CurrentObj;
 
     public void BuyBuilding(out bool CanBuy, CharacterCore.CharacterData playerData, string nametoBuy, float amount)
     {
@@ -74,6 +76,7 @@ public class MarketCore : MonoBehaviourPun
     void BuildProcessing(string nameobj, string nametochange, BuildingCore.BuildingType buildingType, string owenername, marketType marKetType)
     {
         GameObject G = GameObject.Find(nameobj);
+        //Debug.Log(nameobj);
         G.name = nametochange;
         G.gameObject.GetComponent<BuildingCore>().buildingData.ownerName = owenername;
         G.gameObject.GetComponent<BuildingCore>().buildingData.buildingName = nametochange;

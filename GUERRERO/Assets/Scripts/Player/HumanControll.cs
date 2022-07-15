@@ -11,7 +11,6 @@ public class HumanControll : MonoBehaviourPun
      Vector3 direction;
 
      float directionY;
-
     public Transform buildPoint;
 
     private void Start()
@@ -30,43 +29,51 @@ public class HumanControll : MonoBehaviourPun
 
             if (inputX == 0 && inputZ == 0)
             {
-                CharacterCore.Instance.characterData._animator.SetBool("isRunning", false);
+                CharacterCore.Instance.characterData._animator.SetBool("isRunning", false);                
             }            
             else
             {
                 CharacterCore.Instance.characterData._animator.SetBool("isRunning", true);
             }
 
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKey(KeyCode.Tab))
             {
-                //Debug.Log("HoloGram Render Tower");
+                UiCore.Instance.MarketPanel.SetActive(true);
             }
-            if (Input.GetKeyUp(KeyCode.E))
+            else if (Input.GetKey(KeyCode.Escape))
             {
-                bool canmebuy = false;
-                string nametobuy = "";
-                MarketCore.Instance.BuyProcessing(out nametobuy,out canmebuy, CharacterCore.Instance.characterData, this.transform, this.gameObject.name, "SentryLevel1", MarketCore.marketType.Buy, 1, BuildingCore.BuildingType.Tower);
+                UiCore.Instance.MarketPanel.SetActive(false);
             }
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                //Debug.Log("HoloGram Render Barricade");
-            }
-            if (Input.GetKeyUp(KeyCode.Q))
-            {
-                bool canmebuy = false;
-                string nametobuy = "";
-                MarketCore.Instance.BuyProcessing(out nametobuy, out canmebuy, CharacterCore.Instance.characterData, this.transform, this.gameObject.name, "BarricadeLevel1", MarketCore.marketType.Buy, 1, BuildingCore.BuildingType.Barricade);
-            }
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                //Debug.Log("HoloGram Render Barricade");
-            }
-            if (Input.GetKeyUp(KeyCode.F))
-            {
-                bool canmebuy = false;
-                string nametobuy = "";
-                MarketCore.Instance.BuyProcessing(out nametobuy, out canmebuy, CharacterCore.Instance.characterData, this.transform, this.gameObject.name, "TrapLevel1", MarketCore.marketType.Buy, 1, BuildingCore.BuildingType.Trap);
-            }
+            /* if (Input.GetKeyDown(KeyCode.E))
+             {
+                 //Debug.Log("HoloGram Render Tower");
+             }
+             if (Input.GetKeyUp(KeyCode.E))
+             {
+                 bool canmebuy = false;
+                 string nametobuy = "";
+                 MarketCore.Instance.BuyProcessing(out nametobuy,out canmebuy, CharacterCore.Instance.characterData, this.transform, this.gameObject.name, "SentryLevel1", MarketCore.marketType.Buy, 1, BuildingCore.BuildingType.Tower);
+             }
+             if (Input.GetKeyDown(KeyCode.Q))
+             {
+                 //Debug.Log("HoloGram Render Barricade");
+             }
+             if (Input.GetKeyUp(KeyCode.Q))
+             {
+                 bool canmebuy = false;
+                 string nametobuy = "";
+                 MarketCore.Instance.BuyProcessing(out nametobuy, out canmebuy, CharacterCore.Instance.characterData, this.transform, this.gameObject.name, "BarricadeLevel1", MarketCore.marketType.Buy, 1, BuildingCore.BuildingType.Barricade);
+             }
+             if (Input.GetKeyDown(KeyCode.F))
+             {
+                 //Debug.Log("HoloGram Render Barricade");
+             }
+             if (Input.GetKeyUp(KeyCode.F))
+             {
+                 bool canmebuy = false;
+                 string nametobuy = "";
+                 MarketCore.Instance.BuyProcessing(out nametobuy, out canmebuy, CharacterCore.Instance.characterData, this.transform, this.gameObject.name, "TrapLevel1", MarketCore.marketType.Buy, 1, BuildingCore.BuildingType.Trap);
+             }*/
 
         }
     }

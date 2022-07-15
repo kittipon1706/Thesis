@@ -39,6 +39,7 @@ public class CharacterCore : MonoBehaviourPun
     //-------Singleton
 
     public CharacterData characterData;
+    public Transform buildPoint;
 
     void Start()
     {

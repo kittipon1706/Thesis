@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1570123710165827060}
   - component: {fileID: 4848221683439890563}
   - component: {fileID: -1161725932136580874}
+  - component: {fileID: -1844233581070843505}
   m_Layer: 0
   m_Name: Sentry1Prefab
   m_TagString: Untagged
@@ -120,3 +121,16 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &-1844233581070843505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1065892145198898209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b066b4d8ab924a49bdb4c2b6e389a62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingGrp: {fileID: 0}

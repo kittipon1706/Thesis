@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3452554555343409330}
   - component: {fileID: 6895505783637459027}
   - component: {fileID: 7781122816549081475}
+  - component: {fileID: 3877659209559005902}
   m_Layer: 0
   m_Name: Barricade2Prefab
   m_TagString: Untagged
@@ -121,3 +122,16 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -2937260469420670726, guid: 05f52553889a7404fafddd82fedc9276, type: 3}
+--- !u!114 &3877659209559005902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3812592180636758375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b066b4d8ab924a49bdb4c2b6e389a62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingGrp: {fileID: 0}
