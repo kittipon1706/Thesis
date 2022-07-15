@@ -26,8 +26,15 @@ public class UiCore : MonoBehaviour
     private void Start()
     {
         MarketPanel.SetActive(false);
+        ClearButton();
         buildMarketButton();
     }
+
+    /*private void Update()
+    {
+        ClearButton();
+        buildMarketButton();
+    }*/
 
     private void FixedUpdate()
     {
@@ -40,7 +47,7 @@ public class UiCore : MonoBehaviour
     }
 
     private void buildMarketButton()
-    {
+    {       
         foreach (var Target in MarketCore.Instance.buildingDataList)
         {
             if (Target.product_name != "0")
@@ -48,14 +55,20 @@ public class UiCore : MonoBehaviour
                 GameObject newButt = Instantiate(productButton.gameObject, ButtonBoxs.transform);
                 newButt.name = Target.product_name;
                 ButtItemSetting itemSetting = newButt.GetComponent<ButtItemSetting>();
-                itemSetting.SetData(Target.product_name, MarketCore.marketType.Buy, Target.BuildType);
+                itemSetting.SetData(Target.product_name, MarketCore.marketType.Buy, Target.BuildType,Target.price);
 
                 GameObject aText = newButt.transform.GetChild(0).gameObject;
                 Text buttText = aText.GetComponent<Text>();
                 buttText.text = Target.product_name;
-
-
             }            
+        }
+    }
+
+    private void ClearButton()
+    {
+        foreach (Transform target in ButtonBoxs.transform)
+        {
+            Destroy(target.gameObject);
         }
     }
 }

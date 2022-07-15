@@ -1,18 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ButtItemSetting : MonoBehaviour
 {
     public string Buttname;
     public MarketCore.marketType ButtmarketType;
     public BuildingCore.BuildingType ButtBuildingType;
+    public Text priceText;
 
-    public void SetData(string NameSetting, MarketCore.marketType marketTypeSetting, BuildingCore.BuildingType BuildingTypeSetting)
+    public void SetData(string NameSetting, MarketCore.marketType marketTypeSetting, BuildingCore.BuildingType BuildingTypeSetting,float price)
     {
         Buttname = NameSetting;
         ButtmarketType = marketTypeSetting;
         ButtBuildingType = BuildingTypeSetting;
+        priceText.text = "$"+ price.ToString();
     }
 
     public void Click()
