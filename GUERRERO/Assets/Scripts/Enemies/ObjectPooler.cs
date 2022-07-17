@@ -1,19 +1,10 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+using static Guerrero.Data.Data;
 
 public class ObjectPooler : MonoBehaviour
 {
-    [System.Serializable]
-    public class Pool
-    {
-        public string tag;
-        public int size;
-        public GameObject GroupObject;
-        public EnemiesType type;
-    }
-
     #region Singleton
     public static ObjectPooler Instance;
 
@@ -22,14 +13,8 @@ public class ObjectPooler : MonoBehaviour
         Instance = this;
     }
     #endregion
-    public enum EnemiesType
-    {
-        Goblin,
-        Drone,
-        Tank,
-    }
 
-    public List<Pool> pools;
+    public List<PoolData> pools;
     public Dictionary<string, Queue<GameObject>> poolDictionary;
     private List<int> _PoolSize = new List<int>();
     public Action<string, int> OnSizeChange = null;
@@ -37,15 +22,18 @@ public class ObjectPooler : MonoBehaviour
 
     private void Start()
     {
+        Initialize(UnitFactory.Instance.UnitLists);
+
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
-        foreach (Pool pool in pools)
+        foreach (PoolData pool in pools)
         {
+            pool.tag = pool.type.ToString();
             Queue<GameObject> objectPool = new Queue<GameObject>();
             for (int i = 0; i < pool.size; i++)
             {
                 GameObject obj = new GameObject(pool.tag + (i + 1));
-                obj.transform.parent = pool.GroupObject.transform;
+                obj.transform.parent = pool.groupObject.transform;
                 int rd = UnityEngine.Random.Range(0, 3);
                 obj.transform.position = Goblin_Manager.Instance.spawnPoints[rd].position;
                 obj.SetActive(false);
@@ -73,9 +61,21 @@ public class ObjectPooler : MonoBehaviour
         }
     }
 
+    public void Initialize(List<CharacterData> characterData)
+    {
+        foreach (var item in characterData)
+        {
+            PoolData pool = new PoolData();
+            pool.tag = item.type.ToString();
+            pool.type = item.type;
+            pool.groupObject = new GameObject(pool.tag + "Group");
+            pool.size = 0;
+            pools.Add(pool);
+        }
+    }
     public void Setup_Pool(string tag,int unit)
     {
-        foreach (Pool pool in pools)
+        foreach (PoolData pool in pools)
         {  
             Queue<GameObject> objectPool = new Queue<GameObject>();
             if (pool.tag == tag)
@@ -85,7 +85,7 @@ public class ObjectPooler : MonoBehaviour
                 for (int i = 0; i < unit; i++)
                 {
                     GameObject obj = new GameObject(pool.tag + (count + i + 1));
-                    obj.transform.parent = pool.GroupObject.transform;
+                    obj.transform.parent = pool.groupObject.transform;
                     int rd = UnityEngine.Random.Range(0, 3);
                     obj.transform.position = Goblin_Manager.Instance.spawnPoints[rd].position;
                     obj.SetActive(false);
@@ -94,7 +94,6 @@ public class ObjectPooler : MonoBehaviour
                     objectPool.Enqueue(obj);
                 }
                 poolDictionary[pool.tag] = objectPool;
-                Debug.Log(poolDictionary[pool.tag].Count);
                 break;
             }
         }
@@ -127,7 +126,6 @@ public class ObjectPooler : MonoBehaviour
         {
             if (item.tag == tag)
             {
-
                 item.size += size - item.size;
                 break;
             }

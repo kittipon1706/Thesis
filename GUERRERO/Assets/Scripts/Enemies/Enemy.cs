@@ -51,12 +51,12 @@ public abstract class Enemy : MonoBehaviour
         healthPoint = hp;
         if (Model == null)
         {
-            Model = Instantiate(EnemyFactory.Instance.EnemyLists[index].model, gameObject.transform.position, Quaternion.identity);
+            Model = Instantiate(UnitFactory.Instance.UnitLists[index].model, gameObject.transform.position, Quaternion.identity);
             Model.transform.localScale = scale;
             Model.transform.SetParent(gameObject.transform);
         }
-        GetComponent<Animator>().runtimeAnimatorController = EnemyFactory.Instance.EnemyLists[index].animator;
-        GetComponent<Animator>().avatar = EnemyFactory.Instance.EnemyLists[index].avatar;
+        GetComponent<Animator>().runtimeAnimatorController = UnitFactory.Instance.UnitLists[index].animator;
+        GetComponent<Animator>().avatar = UnitFactory.Instance.UnitLists[index].avatar;
     }
 }
 
