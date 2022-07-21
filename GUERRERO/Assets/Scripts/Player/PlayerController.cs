@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        Cursor.lockState = CursorLockMode.Locked;
         view = GetComponent<PhotonView>();
 
         controller = GetComponent<CharacterController>();
@@ -60,11 +61,9 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         if (view.IsMine)
-        {
-
+        {            
             if (onMarketPanel == false)
-            {
-               // Cursor.lockState = CursorLockMode.Locked;
+            {                
 
                 groundedPlayer = controller.isGrounded;
                 if (groundedPlayer && playerVelocity.y < 0)
@@ -98,22 +97,19 @@ public class PlayerController : MonoBehaviour
                  }*/
 
             }
-            else
-            {
-                //Cursor.lockState = CursorLockMode.None;
-            }
 
             if (Input.GetKeyDown(KeyCode.Tab))
             {
-               // Cursor.lockState = CursorLockMode.None;
-               // Cursor.visible = true;
+                 Cursor.lockState = CursorLockMode.None;
+                // Cursor.visible = true;
                 UiCore.Instance.MarketPanel.SetActive(true);                
             }
             else if (Input.GetKeyUp(KeyCode.Tab))
             {
                // Cursor.lockState = CursorLockMode.Locked;
                 //Cursor.visible = false;
-                UiCore.Instance.MarketPanel.SetActive(false);                
+                UiCore.Instance.MarketPanel.SetActive(false);
+                Cursor.lockState = CursorLockMode.Locked;
             }
 
             if (Input.GetKeyDown(KeyCode.Q))
