@@ -42,8 +42,8 @@ public class PlayerController : MonoBehaviour
         if (view.IsMine)
         {
             shootAction.performed += _ => AttackAction();
-            marketAction.performed += _ => UiCore.Instance.MarketPanel.SetActive(true);
-            marketAction.performed += _ => onMarketPanel = true;
+           /* marketAction.performed += _ => UiCore.Instance.MarketPanel.SetActive(true);
+            marketAction.performed += _ => onMarketPanel = true;*/
         }        
     }
 
@@ -52,61 +52,138 @@ public class PlayerController : MonoBehaviour
         if (view.IsMine)
         {
             shootAction.performed -= _ => AttackAction();
-            marketAction.canceled += _ => UiCore.Instance.MarketPanel.SetActive(false);
-            marketAction.canceled += _ => onMarketPanel = false;
+          /*  marketAction.canceled += _ => UiCore.Instance.MarketPanel.SetActive(false);
+            marketAction.canceled += _ => onMarketPanel = false;*/
         }        
     }
 
     void Update()
     {
-        if (view.IsMine && onMarketPanel == false)
+        if (view.IsMine)
         {
-            Cursor.lockState = CursorLockMode.Locked;
 
-            groundedPlayer = controller.isGrounded;
-            if (groundedPlayer && playerVelocity.y < 0)
+            if (onMarketPanel == false)
             {
-                playerVelocity.y = 0f;
+               // Cursor.lockState = CursorLockMode.Locked;
+
+                groundedPlayer = controller.isGrounded;
+                if (groundedPlayer && playerVelocity.y < 0)
+                {
+                    playerVelocity.y = 0f;
+                }
+
+                Vector2 input = moveAction.ReadValue<Vector2>();
+                Vector3 move = new Vector3(input.x, 0, input.y);
+                move = move.x * cameraTransform.right.normalized + move.z * cameraTransform.forward.normalized;
+                move.y = 0f;
+                controller.Move(move * Time.deltaTime * CharacterCore.Instance.characterData.moveSpeed);
+
+                // Changes the height position of the player..
+                if (jumpAction.triggered && groundedPlayer)
+                {
+                    playerVelocity.y += Mathf.Sqrt(CharacterCore.Instance.characterData.jumpForce * -3.0f * CharacterCore.Instance.characterData.gravity);
+                }
+
+                playerVelocity.y += CharacterCore.Instance.characterData.gravity * Time.deltaTime;
+                controller.Move(playerVelocity * Time.deltaTime);
+
+                //Rotate towards Camera Direction.
+                Quaternion targetRotation = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0);
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, CharacterCore.Instance.characterData.rotationSpeed * Time.deltaTime);
+
+                /* RaycastHit hit;
+                 if (Physics.Raycast(Camera.main.transform.position, cameraTransform.forward, out hit, Mathf.Infinity))
+                 {
+                     CharacterCore.Instance.buildPoint = hit.transform;
+                 }*/
+
+            }
+            else
+            {
+                //Cursor.lockState = CursorLockMode.None;
             }
 
-            Vector2 input = moveAction.ReadValue<Vector2>();
-            Vector3 move = new Vector3(input.x, 0, input.y);
-            move = move.x * cameraTransform.right.normalized + move.z * cameraTransform.forward.normalized;
-            move.y = 0f;
-            controller.Move(move * Time.deltaTime * CharacterCore.Instance.characterData.moveSpeed);
-
-            // Changes the height position of the player..
-            if (jumpAction.triggered && groundedPlayer)
+            if (Input.GetKeyDown(KeyCode.Tab))
             {
-                playerVelocity.y += Mathf.Sqrt(CharacterCore.Instance.characterData.jumpForce * -3.0f * CharacterCore.Instance.characterData.gravity);
+               // Cursor.lockState = CursorLockMode.None;
+               // Cursor.visible = true;
+                UiCore.Instance.MarketPanel.SetActive(true);                
+            }
+            else if (Input.GetKeyUp(KeyCode.Tab))
+            {
+               // Cursor.lockState = CursorLockMode.Locked;
+                //Cursor.visible = false;
+                UiCore.Instance.MarketPanel.SetActive(false);                
             }
 
-            playerVelocity.y += CharacterCore.Instance.characterData.gravity * Time.deltaTime;
-            controller.Move(playerVelocity * Time.deltaTime);
-
-            //Rotate towards Camera Direction.
-            Quaternion targetRotation = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, CharacterCore.Instance.characterData.rotationSpeed * Time.deltaTime);
-
-           /* RaycastHit hit;
-            if (Physics.Raycast(Camera.main.transform.position, cameraTransform.forward, out hit, Mathf.Infinity))
+            if (Input.GetKeyDown(KeyCode.Q))
             {
-                CharacterCore.Instance.buildPoint = hit.transform;
-            }*/
+                if (CharacterCore.Instance.characterData.playermode == CharacterCore.PlayerMode.Normal)
+                {
+                    CharacterCore.Instance.characterData.playermode = CharacterCore.PlayerMode.Update;
+                }
+                else
+                {
+                    CharacterCore.Instance.characterData.playermode = CharacterCore.PlayerMode.Normal;
+                }
+                Debug.Log(CharacterCore.Instance.characterData.playermode);
+            }
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                if (CharacterCore.Instance.characterData.playermode == CharacterCore.PlayerMode.Normal)
+                {
+                    CharacterCore.Instance.characterData.playermode = CharacterCore.PlayerMode.Destroy;
+                }
+                else
+                {
+                    CharacterCore.Instance.characterData.playermode = CharacterCore.PlayerMode.Normal;
+                }
+                Debug.Log(CharacterCore.Instance.characterData.playermode);
+            }
         }
 
         if (onMarketPanel == true)
         {
             Cursor.lockState = CursorLockMode.None;
         }
+        
     }
+
+   /* void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "Building")
+        {
+            var objcomp = other.GetComponent<BuildingCore>();
+            if ((objcomp.buildingData.ownerName == this.name) && (CharacterCore.Instance.characterData.playermode == CharacterCore.PlayerMode.Update) && (Input.GetMouseButtonDown(0)))
+            {
+                Debug.Log("CLiCK UpDate");
+                BuildingCore.Instance.UpLevelBuilding_Click();
+            }
+            else if ((objcomp.buildingData.ownerName == this.name) && (CharacterCore.Instance.characterData.playermode == CharacterCore.PlayerMode.Destroy) && (Input.GetMouseButtonDown(0)))
+            {
+                Debug.Log("CLiCK DElete");
+                BuildingCore.Instance.DeleteBuilding();
+            }
+        }
+    }*/
 
     private void AttackAction()
     {
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.transform.position, cameraTransform.forward, out hit, Mathf.Infinity))
         {
-            Debug.Log(hit.transform.name);
+            //Debug.Log(hit.transform.name);
+            if ((hit.transform.tag == "Building") && (CharacterCore.Instance.characterData.playermode == CharacterCore.PlayerMode.Update))
+            {
+                var objcomp = hit.transform.GetComponent<BuildingCore>();
+                objcomp.UpLevelBuilding_Click();
+            }
+            else if ((hit.transform.tag == "Building") && (CharacterCore.Instance.characterData.playermode == CharacterCore.PlayerMode.Destroy))
+            {
+                var objcomp = hit.transform.GetComponent<BuildingCore>();
+                objcomp.DeleteBuilding();
+            }
         }
     }
 }

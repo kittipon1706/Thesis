@@ -1266,8 +1266,8 @@ GameObject:
   - component: {fileID: 7273117966063146933}
   - component: {fileID: 7273117966063146932}
   - component: {fileID: 7506981130662947552}
-  - component: {fileID: 7273117966063146930}
   - component: {fileID: 7506981130662947555}
+  - component: {fileID: 7273117966063146930}
   m_Layer: 0
   m_Name: bug_sax_NEwInput
   m_TagString: Player
@@ -1420,18 +1420,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &7273117966063146930
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7506981130662947553}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5aa10f6a4515c724bbed0a9de90d1672, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &7506981130662947555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1458,7 +1446,20 @@ MonoBehaviour:
     damage: 20
     armor: 0
     coin: 1000
+    playermode: 0
   buildPoint: {fileID: 7273117964637870908}
+--- !u!114 &7273117966063146930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7506981130662947553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5aa10f6a4515c724bbed0a9de90d1672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7674451217930305221
 GameObject:
   m_ObjectHideFlags: 0

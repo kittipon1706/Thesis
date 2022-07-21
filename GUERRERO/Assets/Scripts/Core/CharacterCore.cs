@@ -24,7 +24,15 @@ public class CharacterCore : MonoBehaviourPun
         public float damage;
         public float armor;
         public float coin;
-    }    
+
+        public PlayerMode playermode;
+    }
+    public enum PlayerMode
+    {
+        Normal,
+        Update,
+        Destroy
+    }
 
     //-------Singleton
     PhotonView view;

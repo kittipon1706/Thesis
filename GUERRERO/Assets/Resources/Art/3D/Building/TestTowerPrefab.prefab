@@ -88,6 +88,7 @@ MonoBehaviour:
     damage: 0
     armor: 0
     coin: 0
+    playermode: 0
   overhead_HealthText: {fileID: 6042052159026494976}
 --- !u!114 &7596745618828779929
 MonoBehaviour:

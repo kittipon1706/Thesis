@@ -22,6 +22,7 @@ public class UiCore : MonoBehaviour
     public Button productButton;
     public Text healthText_detail;
     public Text powerText_detail;
+    public Text playModeText;
 
     CharacterCore.CharacterData characterData;
 
@@ -46,6 +47,7 @@ public class UiCore : MonoBehaviour
         }
         healthText.text = "HEALTH :" + characterData.currentHealth.ToString();
         coinText.text = "COIN :" + characterData.coin.ToString();
+        playModeText.text = "MODE :" + characterData.playermode.ToString();
     }
 
     private void buildMarketButton()
