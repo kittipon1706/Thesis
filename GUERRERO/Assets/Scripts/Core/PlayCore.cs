@@ -39,6 +39,9 @@ public class PlayCore : MonoBehaviour
     [SerializeField] GameObject spawnPlayerTarget2;
     [SerializeField] GameObject spawnHouseBaseTarget1;
     [SerializeField] GameObject spawnHouseBaseTarget2;
+    [SerializeField] GameObject Player_Camera;
+    [SerializeField] GameObject TPS;
+    [SerializeField] GameObject TPS_Zoom;
 
     [SerializeField] int timeToLaunch;
 
@@ -48,6 +51,7 @@ public class PlayCore : MonoBehaviour
     private void Start()
     {
         view = GetComponent<PhotonView>();
+        //Instantiate(Player_Camera, Vector3.zero, Quaternion.identity);        
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -75,7 +79,8 @@ public class PlayCore : MonoBehaviour
             view.RPC("ChangeName", RpcTarget.All, player2tmp.name, "Player",false , minorname);
             view.RPC("ChangeName", RpcTarget.All, house2tmp.name, "House",false , minorname);
         }
-
+        Instantiate(TPS, Vector3.zero, Quaternion.identity);
+        Instantiate(TPS_Zoom, Vector3.zero, Quaternion.identity);
     }
 
     [PunRPC]

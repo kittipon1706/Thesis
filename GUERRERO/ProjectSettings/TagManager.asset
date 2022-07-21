@@ -9,6 +9,9 @@ TagManager:
   - CameraTarget
   - Objective
   - WeaponEN
+  - Bullet
+  - Building
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -19,7 +22,7 @@ TagManager:
   - Enemies
   - Walkable
   - Building
-  - 
+  - EnvironMent
   - 
   - 
   - 

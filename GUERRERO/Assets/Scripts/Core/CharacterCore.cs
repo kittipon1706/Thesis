@@ -17,6 +17,7 @@ public class CharacterCore : MonoBehaviourPun
         public float moveSpeed;
         public float jumpForce;
         public float gravity;
+        public float rotationSpeed;
 
         public float maxhealth;
         public float currentHealth;

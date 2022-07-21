@@ -82,6 +82,7 @@ MonoBehaviour:
     moveSpeed: 0
     jumpForce: 0
     gravity: 0
+    rotationSpeed: 0
     maxhealth: 0
     currentHealth: 0
     damage: 0

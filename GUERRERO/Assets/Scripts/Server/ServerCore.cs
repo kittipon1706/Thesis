@@ -64,15 +64,21 @@ public class ServerCore : MonoBehaviourPunCallbacks
     //-----OnClick
     public void ClickCreateRoom()
     {
-        PhotonNetwork.CreateRoom(createInput.text , new Photon.Realtime.RoomOptions() { MaxPlayers = 2});
-        PlayerPrefs.SetString("MasterPlayername", "ALPHA");
+        if (createInput.text != "")
+        {
+            PhotonNetwork.CreateRoom(createInput.text, new Photon.Realtime.RoomOptions() { MaxPlayers = 2 });
+            PlayerPrefs.SetString("MasterPlayername", "ALPHA");
+        }        
     }
 
 
     public void ClickJoinRoom()
     {
-        PhotonNetwork.JoinRoom(joinInput.text);
-        PlayerPrefs.SetString("MinorPlayername", "BRAVO");
+        if (joinInput.text != "")
+        {
+            PhotonNetwork.JoinRoom(joinInput.text);
+            PlayerPrefs.SetString("MinorPlayername", "BRAVO");
+        }
     }
 
     public void ClickConnect()
