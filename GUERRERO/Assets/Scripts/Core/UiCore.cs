@@ -38,7 +38,7 @@ public class UiCore : MonoBehaviour
         ClearButton();
         buildMarketButton();
     }*/
-
+    
     private void FixedUpdate()
     {
         if (characterData == null)
@@ -50,7 +50,7 @@ public class UiCore : MonoBehaviour
         playModeText.text = "MODE :" + characterData.playermode.ToString();
     }
 
-    private void buildMarketButton()
+    public void buildMarketButton()
     {       
         foreach (var Target in MarketCore.Instance.buildingDataList)
         {
@@ -68,7 +68,7 @@ public class UiCore : MonoBehaviour
         }
     }
 
-    private void ClearButton()
+    public void ClearButton()
     {
         foreach (Transform target in ButtonBoxs.transform)
         {

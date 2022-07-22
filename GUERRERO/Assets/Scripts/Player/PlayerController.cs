@@ -100,13 +100,17 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Tab))
             {
+                onMarketPanel = true;
                  Cursor.lockState = CursorLockMode.None;
                 // Cursor.visible = true;
+                UiCore.Instance.ClearButton();
+                UiCore.Instance.buildMarketButton();
                 UiCore.Instance.MarketPanel.SetActive(true);                
             }
             else if (Input.GetKeyUp(KeyCode.Tab))
             {
-               // Cursor.lockState = CursorLockMode.Locked;
+                onMarketPanel = false;
+                // Cursor.lockState = CursorLockMode.Locked;
                 //Cursor.visible = false;
                 UiCore.Instance.MarketPanel.SetActive(false);
                 Cursor.lockState = CursorLockMode.Locked;
@@ -114,7 +118,7 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                if (CharacterCore.Instance.characterData.playermode == CharacterCore.PlayerMode.Normal)
+                if (CharacterCore.Instance.characterData.playermode != CharacterCore.PlayerMode.Update)
                 {
                     CharacterCore.Instance.characterData.playermode = CharacterCore.PlayerMode.Update;
                 }
@@ -127,7 +131,7 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.E))
             {
-                if (CharacterCore.Instance.characterData.playermode == CharacterCore.PlayerMode.Normal)
+                if (CharacterCore.Instance.characterData.playermode != CharacterCore.PlayerMode.Destroy)
                 {
                     CharacterCore.Instance.characterData.playermode = CharacterCore.PlayerMode.Destroy;
                 }
@@ -172,13 +176,15 @@ public class PlayerController : MonoBehaviour
             //Debug.Log(hit.transform.name);
             if ((hit.transform.tag == "Building") && (CharacterCore.Instance.characterData.playermode == CharacterCore.PlayerMode.Update))
             {
-                var objcomp = hit.transform.GetComponent<BuildingCore>();
-                objcomp.UpLevelBuilding_Click();
+                /* var objcomp = hit.transform.GetComponent<BuildingCore>();
+                 objcomp.UpLevelBuilding_Click();*/
+                hit.transform.GetComponent<BuildingCore>().UpLevelBuilding_Click();
             }
             else if ((hit.transform.tag == "Building") && (CharacterCore.Instance.characterData.playermode == CharacterCore.PlayerMode.Destroy))
             {
-                var objcomp = hit.transform.GetComponent<BuildingCore>();
-                objcomp.DeleteBuilding();
+                /*  var objcomp = hit.transform.GetComponent<BuildingCore>();
+                  objcomp.DeleteBuilding();*/
+                hit.transform.GetComponent<BuildingCore>().DeleteBuilding();
             }
         }
     }
